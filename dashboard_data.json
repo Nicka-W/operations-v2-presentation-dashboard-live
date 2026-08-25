@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-25T14:37:01.586006+00:00",
-  "sourceModifiedAt": "2026-08-18T18:42:18+00:00",
+  "generatedAt": "2026-08-25T22:32:34.084645+00:00",
+  "sourceModifiedAt": "2026-08-25T21:35:32+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -174,6 +174,11 @@
           "week": 34,
           "value_92m": 0.87,
           "value_12m": null
+        },
+        {
+          "week": 35,
+          "value_92m": 0.89,
+          "value_12m": null
         }
       ]
     },
@@ -237,6 +242,10 @@
       {
         "label": 15,
         "value": 0.9971
+      },
+      {
+        "label": 16,
+        "value": 0.915
       }
     ],
     "container-george": [
@@ -428,7 +437,11 @@
       },
       {
         "label": 34,
-        "value": 0.583
+        "value": 0.567
+      },
+      {
+        "label": 35,
+        "value": 0.4
       }
     ],
     "dispatch-accuracy": [
@@ -567,33 +580,37 @@
       {
         "label": 34,
         "value": 0.9949
+      },
+      {
+        "label": 35,
+        "value": 0.994
       }
     ],
     "sku-share": [
       {
         "picker": "Ali",
-        "count": 118,
-        "share": 0.03116745905969361
+        "count": 465,
+        "share": 0.0870949616032965
       },
       {
         "picker": "Angelo",
-        "count": 100,
-        "share": 0.02641310089804543
+        "count": 109,
+        "share": 0.02041580820378348
       },
       {
         "picker": "Charlie",
-        "count": 1192,
-        "share": 0.31484416270470156
+        "count": 1371,
+        "share": 0.2567896609852032
       },
       {
         "picker": "Bongani",
-        "count": 1354,
-        "share": 0.3576333861595351
+        "count": 2028,
+        "share": 0.3798464131859899
       },
       {
         "picker": "Endwell",
-        "count": 1022,
-        "share": 0.2699418911780243
+        "count": 1366,
+        "share": 0.2558531560217269
       }
     ],
     "sku-monthly": [
@@ -650,8 +667,8 @@
         "month": "Aug",
         "y2024": 6219,
         "y2025": 8479,
-        "y2026_cpt": 3786,
-        "y2026_george": 1137
+        "y2026_cpt": 5339,
+        "y2026_george": 1539
       },
       {
         "month": "Sept",
@@ -727,9 +744,9 @@
       },
       {
         "month": "Aug",
-        "assembled": 7,
-        "backorders": 4,
-        "fill_rate": 0.4285714285714286
+        "assembled": 11,
+        "backorders": 6,
+        "fill_rate": 0.4545454545454546
       },
       {
         "month": "Sept",
