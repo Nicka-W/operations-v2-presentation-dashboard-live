@@ -28,18 +28,37 @@ def run(cmd, **kwargs):
     return result
 
 
-def repo_is_dirty():
+def dirty_files():
     result = run(["git", "status", "--porcelain"])
-    return bool(result.stdout.strip())
+    files = []
+    for line in result.stdout.splitlines():
+        if not line.strip():
+            continue
+        files.append(line[3:].strip())
+    return files
+
+
+def repo_is_dirty():
+    return bool(dirty_files())
 
 
 def main():
-    if repo_is_dirty():
+    files = dirty_files()
+    unexpected = [f for f in files if f != "dashboard_data.json"]
+    if unexpected:
         print(
-            "[publish] ERROR: repo has uncommitted changes. "
-            "Commit or stash them -- auto-publish will not rebase a dirty repo."
+            "[publish] ERROR: repo has uncommitted changes outside dashboard_data.json: "
+            f"{unexpected}. Commit or stash them -- auto-publish will not rebase a dirty repo."
         )
         sys.exit(1)
+
+    if "dashboard_data.json" in files:
+        print(
+            "[publish] dashboard_data.json has pending changes from an earlier manual run "
+            "-- committing them before continuing."
+        )
+        run(["git", "add", "dashboard_data.json"])
+        run(["git", "commit", "-m", "Auto-publish: commit pending dashboard_data.json changes"])
 
     fetch = run(["git", "fetch", "origin"])
     if fetch.returncode != 0:
