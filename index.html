@@ -262,7 +262,13 @@ function latestValue(key, type) {
   }
   if (type === "donut") return null;
   if (type === "sku_monthly") return null;
-  if (Array.isArray(kpi) && kpi.length) return kpi[kpi.length - 1].value ?? kpi[kpi.length - 1].fill_rate;
+  if (Array.isArray(kpi) && kpi.length) {
+    for (let i = kpi.length - 1; i >= 0; i--) {
+      const v = kpi[i].value ?? kpi[i].fill_rate;
+      if (v !== null && v !== undefined) return v;
+    }
+    return null;
+  }
   return null;
 }
 
