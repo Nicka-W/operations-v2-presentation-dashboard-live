@@ -1,0 +1,817 @@
+{
+  "generatedAt": "2026-08-24T19:54:03.272251+00:00",
+  "sourceModifiedAt": "2026-08-24T14:37:23.690787+00:00",
+  "kpis": {
+    "housekeeping": {
+      "average": 0.77,
+      "weekly": [
+        {
+          "week": 1,
+          "value_92m": 0.74,
+          "value_12m": 0
+        },
+        {
+          "week": 2,
+          "value_92m": 0.76,
+          "value_12m": 0
+        },
+        {
+          "week": 3,
+          "value_92m": 0.77,
+          "value_12m": 0.73
+        },
+        {
+          "week": 4,
+          "value_92m": 0.75,
+          "value_12m": 0.82
+        },
+        {
+          "week": 5,
+          "value_92m": 0.7,
+          "value_12m": 0.77
+        },
+        {
+          "week": 6,
+          "value_92m": 0.71,
+          "value_12m": 0.73
+        },
+        {
+          "week": 7,
+          "value_92m": 0.65,
+          "value_12m": 0
+        },
+        {
+          "week": 8,
+          "value_92m": 0.69,
+          "value_12m": 0.83
+        },
+        {
+          "week": 9,
+          "value_92m": 0.7,
+          "value_12m": 0.55
+        },
+        {
+          "week": 10,
+          "value_92m": 0.67,
+          "value_12m": 0.77
+        },
+        {
+          "week": 11,
+          "value_92m": 0.49,
+          "value_12m": 0.73
+        },
+        {
+          "week": 12,
+          "value_92m": 0.76,
+          "value_12m": null
+        },
+        {
+          "week": 13,
+          "value_92m": 0.73,
+          "value_12m": null
+        },
+        {
+          "week": 14,
+          "value_92m": 0.87,
+          "value_12m": null
+        },
+        {
+          "week": 15,
+          "value_92m": 0.74,
+          "value_12m": null
+        },
+        {
+          "week": 16,
+          "value_92m": 0.7,
+          "value_12m": null
+        },
+        {
+          "week": 17,
+          "value_92m": 0.5,
+          "value_12m": null
+        },
+        {
+          "week": 18,
+          "value_92m": 0.68,
+          "value_12m": null
+        },
+        {
+          "week": 19,
+          "value_92m": 0.65,
+          "value_12m": null
+        },
+        {
+          "week": 20,
+          "value_92m": 0.56,
+          "value_12m": null
+        },
+        {
+          "week": 21,
+          "value_92m": 0.78,
+          "value_12m": null
+        },
+        {
+          "week": 22,
+          "value_92m": 0.7,
+          "value_12m": null
+        },
+        {
+          "week": 23,
+          "value_92m": 0.72,
+          "value_12m": null
+        },
+        {
+          "week": 24,
+          "value_92m": 0.74,
+          "value_12m": null
+        },
+        {
+          "week": 25,
+          "value_92m": 0.73,
+          "value_12m": null
+        },
+        {
+          "week": 26,
+          "value_92m": 0.71,
+          "value_12m": null
+        },
+        {
+          "week": 27,
+          "value_92m": 0.71,
+          "value_12m": null
+        },
+        {
+          "week": 28,
+          "value_92m": 0.82,
+          "value_12m": 0.67
+        },
+        {
+          "week": 29,
+          "value_92m": 0.85,
+          "value_12m": null
+        },
+        {
+          "week": 30,
+          "value_92m": 0.87,
+          "value_12m": 0.77
+        },
+        {
+          "week": 31,
+          "value_92m": 0.86,
+          "value_12m": 0.82
+        },
+        {
+          "week": 32,
+          "value_92m": 0.86,
+          "value_12m": null
+        },
+        {
+          "week": 33,
+          "value_92m": 0.88,
+          "value_12m": null
+        },
+        {
+          "week": 34,
+          "value_92m": 0.87,
+          "value_12m": null
+        }
+      ]
+    },
+    "container-jhb": [
+      {
+        "label": 1,
+        "value": 1
+      },
+      {
+        "label": 2,
+        "value": 0.943
+      },
+      {
+        "label": 3,
+        "value": 1
+      },
+      {
+        "label": 4,
+        "value": 0.97
+      },
+      {
+        "label": 5,
+        "value": 0.998
+      },
+      {
+        "label": 6,
+        "value": 0.996
+      },
+      {
+        "label": 7,
+        "value": 0.9129999999999999
+      },
+      {
+        "label": 8,
+        "value": 0.934
+      },
+      {
+        "label": 9,
+        "value": 0.99
+      },
+      {
+        "label": 10,
+        "value": 0.975
+      },
+      {
+        "label": 11,
+        "value": 0.988
+      },
+      {
+        "label": 12,
+        "value": 0.972
+      },
+      {
+        "label": 13,
+        "value": 0.9761
+      },
+      {
+        "label": 14,
+        "value": 0.9871
+      },
+      {
+        "label": 15,
+        "value": 0.9971
+      }
+    ],
+    "container-george": [
+      {
+        "label": 1,
+        "value": 0.938
+      },
+      {
+        "label": 2,
+        "value": 0.992
+      },
+      {
+        "label": 3,
+        "value": 0.991
+      },
+      {
+        "label": 4,
+        "value": 1
+      },
+      {
+        "label": 5,
+        "value": 0.847
+      },
+      {
+        "label": 6,
+        "value": 0.9620000000000001
+      },
+      {
+        "label": 7,
+        "value": 0.985
+      },
+      {
+        "label": 8,
+        "value": 0.9976
+      },
+      {
+        "label": 9,
+        "value": 0.9976
+      },
+      {
+        "label": 10,
+        "value": 0.9943
+      },
+      {
+        "label": 11,
+        "value": null
+      },
+      {
+        "label": 12,
+        "value": null
+      },
+      {
+        "label": 13,
+        "value": null
+      }
+    ],
+    "urgent-orders": [
+      {
+        "label": 1,
+        "value": 0.01
+      },
+      {
+        "label": 2,
+        "value": 0
+      },
+      {
+        "label": 3,
+        "value": 0.01
+      },
+      {
+        "label": 4,
+        "value": 0.04
+      },
+      {
+        "label": 5,
+        "value": 0.02
+      },
+      {
+        "label": 6,
+        "value": 0.06
+      },
+      {
+        "label": 7,
+        "value": 0.07
+      },
+      {
+        "label": 8,
+        "value": 0.07
+      },
+      {
+        "label": 9,
+        "value": 0.03
+      },
+      {
+        "label": 10,
+        "value": 0.11
+      },
+      {
+        "label": 11,
+        "value": 0.09
+      },
+      {
+        "label": 12,
+        "value": 0.1
+      },
+      {
+        "label": 13,
+        "value": 0.02
+      },
+      {
+        "label": 14,
+        "value": 0.065
+      },
+      {
+        "label": 15,
+        "value": 0.111
+      },
+      {
+        "label": 16,
+        "value": 0.407
+      },
+      {
+        "label": 17,
+        "value": 0.323
+      },
+      {
+        "label": 18,
+        "value": 0.253
+      },
+      {
+        "label": 19,
+        "value": 0.391
+      },
+      {
+        "label": 20,
+        "value": 0.393
+      },
+      {
+        "label": 21,
+        "value": 0.39
+      },
+      {
+        "label": 22,
+        "value": 0.37
+      },
+      {
+        "label": 23,
+        "value": 0.379
+      },
+      {
+        "label": 24,
+        "value": 0.329
+      },
+      {
+        "label": 25,
+        "value": 0.413
+      },
+      {
+        "label": 26,
+        "value": 0.359
+      },
+      {
+        "label": 27,
+        "value": 0.268
+      },
+      {
+        "label": 28,
+        "value": 0.385
+      },
+      {
+        "label": 29,
+        "value": 0.323
+      },
+      {
+        "label": 30,
+        "value": 0.203
+      },
+      {
+        "label": 31,
+        "value": 0.313
+      },
+      {
+        "label": 32,
+        "value": 0.368
+      },
+      {
+        "label": 33,
+        "value": 0.378
+      },
+      {
+        "label": 34,
+        "value": 0.583
+      }
+    ],
+    "dispatch-accuracy": [
+      {
+        "label": 1,
+        "value": 1
+      },
+      {
+        "label": 2,
+        "value": 1
+      },
+      {
+        "label": 3,
+        "value": 0.996
+      },
+      {
+        "label": 4,
+        "value": 1
+      },
+      {
+        "label": 5,
+        "value": 0.991
+      },
+      {
+        "label": 6,
+        "value": 1
+      },
+      {
+        "label": 7,
+        "value": 1
+      },
+      {
+        "label": 8,
+        "value": 0.993
+      },
+      {
+        "label": 9,
+        "value": 0.996
+      },
+      {
+        "label": 10,
+        "value": 0.993
+      },
+      {
+        "label": 11,
+        "value": 0.993
+      },
+      {
+        "label": 12,
+        "value": 1
+      },
+      {
+        "label": 13,
+        "value": 0.995
+      },
+      {
+        "label": 14,
+        "value": 1
+      },
+      {
+        "label": 15,
+        "value": 0.99
+      },
+      {
+        "label": 16,
+        "value": 0.993
+      },
+      {
+        "label": 17,
+        "value": 0.992
+      },
+      {
+        "label": 18,
+        "value": 1
+      },
+      {
+        "label": 19,
+        "value": 0.99
+      },
+      {
+        "label": 20,
+        "value": 0.997
+      },
+      {
+        "label": 21,
+        "value": 1
+      },
+      {
+        "label": 22,
+        "value": 1
+      },
+      {
+        "label": 23,
+        "value": 0.999
+      },
+      {
+        "label": 24,
+        "value": 1
+      },
+      {
+        "label": 25,
+        "value": 0.998
+      },
+      {
+        "label": 26,
+        "value": 0.9929
+      },
+      {
+        "label": 27,
+        "value": 1
+      },
+      {
+        "label": 28,
+        "value": 0.996
+      },
+      {
+        "label": 29,
+        "value": 0.9927
+      },
+      {
+        "label": 30,
+        "value": 1
+      },
+      {
+        "label": 31,
+        "value": 0.9958
+      },
+      {
+        "label": 32,
+        "value": 1
+      },
+      {
+        "label": 33,
+        "value": 0.9936
+      },
+      {
+        "label": 34,
+        "value": 0.9949
+      }
+    ],
+    "sku-share": [
+      {
+        "picker": "Ali",
+        "count": 118,
+        "share": 0.03116745905969361
+      },
+      {
+        "picker": "Angelo",
+        "count": 100,
+        "share": 0.02641310089804543
+      },
+      {
+        "picker": "Charlie",
+        "count": 1192,
+        "share": 0.31484416270470156
+      },
+      {
+        "picker": "Bongani",
+        "count": 1354,
+        "share": 0.3576333861595351
+      },
+      {
+        "picker": "Endwell",
+        "count": 1022,
+        "share": 0.2699418911780243
+      }
+    ],
+    "sku-monthly": [
+      {
+        "month": "Jan",
+        "y2024": 2289,
+        "y2025": 6124,
+        "y2026_cpt": 3207,
+        "y2026_george": null
+      },
+      {
+        "month": "Feb",
+        "y2024": 4016,
+        "y2025": 4950,
+        "y2026_cpt": 4551,
+        "y2026_george": 102
+      },
+      {
+        "month": "Mar",
+        "y2024": 2233,
+        "y2025": 6414,
+        "y2026_cpt": 6328,
+        "y2026_george": 902
+      },
+      {
+        "month": "Apr",
+        "y2024": 5853,
+        "y2025": 8719,
+        "y2026_cpt": 10135,
+        "y2026_george": 1414
+      },
+      {
+        "month": "May",
+        "y2024": 7739,
+        "y2025": 12562,
+        "y2026_cpt": 14653,
+        "y2026_george": 3054
+      },
+      {
+        "month": "Jun",
+        "y2024": 4899,
+        "y2025": 13634,
+        "y2026_cpt": 9355,
+        "y2026_george": 1869
+      },
+      {
+        "month": "Jul",
+        "y2024": 8621,
+        "y2025": 13275,
+        "y2026_cpt": 9756,
+        "y2026_george": 2353
+      },
+      {
+        "month": "Aug",
+        "y2024": 6219,
+        "y2025": 8479,
+        "y2026_cpt": 3786,
+        "y2026_george": 1137
+      },
+      {
+        "month": "Sept",
+        "y2024": 3741,
+        "y2025": 5453,
+        "y2026_cpt": null,
+        "y2026_george": null
+      },
+      {
+        "month": "Oct",
+        "y2024": 3941,
+        "y2025": 5293,
+        "y2026_cpt": null,
+        "y2026_george": null
+      },
+      {
+        "month": "Nov",
+        "y2024": 2973,
+        "y2025": 4152,
+        "y2026_cpt": null,
+        "y2026_george": null
+      },
+      {
+        "month": "Dec",
+        "y2024": 1199,
+        "y2025": 2067,
+        "y2026_cpt": null,
+        "y2026_george": null
+      }
+    ],
+    "assembly-backorders": [
+      {
+        "month": "Jan",
+        "assembled": 14,
+        "backorders": 1,
+        "fill_rate": 0.9285714285714286
+      },
+      {
+        "month": "Feb",
+        "assembled": 12,
+        "backorders": 5,
+        "fill_rate": 0.5833333333333333
+      },
+      {
+        "month": "Mar",
+        "assembled": 36,
+        "backorders": 6,
+        "fill_rate": 0.8333333333333334
+      },
+      {
+        "month": "Apr",
+        "assembled": 22,
+        "backorders": 10,
+        "fill_rate": 0.5454545454545454
+      },
+      {
+        "month": "May",
+        "assembled": 48,
+        "backorders": 25,
+        "fill_rate": 0.47916666666666663
+      },
+      {
+        "month": "Jun",
+        "assembled": 24,
+        "backorders": 8,
+        "fill_rate": 0.6666666666666667
+      },
+      {
+        "month": "Jul",
+        "assembled": 31,
+        "backorders": 6,
+        "fill_rate": 0.8064516129032258
+      },
+      {
+        "month": "Aug",
+        "assembled": 7,
+        "backorders": 4,
+        "fill_rate": 0.4285714285714286
+      },
+      {
+        "month": "Sept",
+        "assembled": null,
+        "backorders": null,
+        "fill_rate": null
+      },
+      {
+        "month": "Oct",
+        "assembled": null,
+        "backorders": null,
+        "fill_rate": null
+      },
+      {
+        "month": "Nov",
+        "assembled": null,
+        "backorders": null,
+        "fill_rate": null
+      },
+      {
+        "month": "Dec",
+        "assembled": null,
+        "backorders": null,
+        "fill_rate": null
+      }
+    ]
+  },
+  "colorRules": {
+    "housekeeping": [
+      {
+        "max": 0.5,
+        "color": "red"
+      },
+      {
+        "max": 0.8,
+        "color": "orange"
+      },
+      {
+        "color": "green"
+      }
+    ],
+    "accuracy": [
+      {
+        "max": 0.97,
+        "color": "red",
+        "inclusive_max": true
+      },
+      {
+        "max": 0.99,
+        "color": "orange"
+      },
+      {
+        "color": "green"
+      }
+    ],
+    "urgent_orders": [
+      {
+        "max": 0.05,
+        "color": "green",
+        "inclusive_max": true
+      },
+      {
+        "max": 0.1,
+        "color": "orange",
+        "inclusive_max": true
+      },
+      {
+        "color": "red"
+      }
+    ],
+    "assembly_fill_rate": [
+      {
+        "max": 0.7,
+        "color": "red"
+      },
+      {
+        "max": 0.85,
+        "color": "orange"
+      },
+      {
+        "color": "green"
+      }
+    ]
+  }
+}

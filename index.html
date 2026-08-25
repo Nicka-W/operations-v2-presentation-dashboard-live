@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations V2 Board</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0b0e14;
+    --panel: #131826;
+    --panel-border: #232a3d;
+    --text: #f2f4f8;
+    --text-dim: #9aa4b8;
+    --accent: #4fd1ff;
+    --red: #ff5470;
+    --orange: #ffb454;
+    --green: #3ddc97;
+    --target-line: #3ddc97;
+    --trend-line: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  header {
+    padding: 20px 28px 8px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  h1 {
+    font-size: 22px;
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+  .latest-reading {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .latest-reading b { color: var(--text); }
+
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(120px, 1fr));
+    gap: 10px;
+    padding: 12px 28px;
+  }
+  .kpi-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .kpi-card:hover { transform: translateY(-2px); }
+  .kpi-card.active { border-color: var(--accent); }
+  .kpi-card .label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .kpi-card .value {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .dot.red { background: var(--red); }
+  .dot.orange { background: var(--orange); }
+  .dot.green { background: var(--green); }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 28px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .selector-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .selector-buttons button {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    color: var(--text-dim);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .selector-buttons button.active {
+    color: var(--bg);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .toggle {
+    display: flex;
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .toggle button {
+    background: var(--panel);
+    color: var(--text-dim);
+    border: none;
+    padding: 6px 16px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .toggle button.active { background: var(--accent); color: var(--bg); }
+
+  .facts-strip {
+    padding: 12px 28px 0;
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .facts-strip b { color: var(--text); }
+
+  .panel {
+    margin: 14px 28px 28px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 18px;
+    min-height: 360px;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--panel-border); }
+  th { color: var(--text-dim); font-weight: 600; text-transform: uppercase; font-size: 11px; }
+
+  .refresh-row {
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .refresh-row button {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .refresh-row span { font-size: 11px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Operations V2 Board</h1>
+  <div class="latest-reading">Latest reading: <b id="latestReading">—</b></div>
+</header>
+
+<div class="refresh-row">
+  <button id="refreshBtn">Refresh Now</button>
+  <span id="refreshStatus"></span>
+</div>
+
+<div class="kpi-strip" id="kpiStrip"></div>
+
+<div class="controls">
+  <div class="selector-buttons" id="selectorButtons"></div>
+  <div class="toggle">
+    <button id="tableToggle" class="active">Table</button>
+    <button id="chartToggle">Chart</button>
+  </div>
+</div>
+
+<div class="facts-strip" id="factsStrip"></div>
+
+<div class="panel">
+  <div id="tableView"></div>
+  <canvas id="chartView" style="display:none;"></canvas>
+</div>
+
+<script>
+const KPI_DEFS = [
+  { key: "housekeeping", label: "Housekeeping", type: "housekeeping" },
+  { key: "container-jhb", label: "JHB Accuracy", type: "accuracy" },
+  { key: "container-george", label: "George Accuracy", type: "accuracy" },
+  { key: "urgent-orders", label: "Urgent Orders", type: "urgent" },
+  { key: "dispatch-accuracy", label: "Dispatch Accuracy", type: "accuracy" },
+  { key: "sku-share", label: "SKU Share", type: "donut" },
+  { key: "sku-monthly", label: "SKU 2026 YTD", type: "sku_monthly" },
+  { key: "assembly-backorders", label: "Assembly Fill Rate", type: "fill_rate" },
+];
+
+let dashboardData = null;
+let activeKpi = "housekeeping";
+let activeView = "table";
+let chartInstance = null;
+
+function colorFor(type, value) {
+  if (value === null || value === undefined || value === "") return "";
+  if (type === "housekeeping") {
+    if (value < 0.50) return "red";
+    if (value < 0.80) return "orange";
+    return "green";
+  }
+  if (type === "accuracy") {
+    if (value <= 0.97) return "red";
+    if (value < 0.99) return "orange";
+    return "green";
+  }
+  if (type === "urgent") {
+    if (value <= 0.05) return "green";
+    if (value <= 0.10) return "orange";
+    return "red";
+  }
+  if (type === "fill_rate") {
+    if (value < 0.70) return "red";
+    if (value < 0.85) return "orange";
+    return "green";
+  }
+  return "";
+}
+
+function pct(v) {
+  if (v === null || v === undefined || v === "") return "—";
+  return (v * 100).toFixed(1) + "%";
+}
+
+async function loadData() {
+  document.getElementById("refreshStatus").textContent = "Loading…";
+  try {
+    const res = await fetch("dashboard_data.json?_=" + Date.now());
+    dashboardData = await res.json();
+    document.getElementById("latestReading").textContent =
+      new Date(dashboardData.generatedAt).toLocaleString();
+    document.getElementById("refreshStatus").textContent = "";
+    renderAll();
+  } catch (e) {
+    document.getElementById("refreshStatus").textContent = "Failed to load dashboard_data.json";
+  }
+}
+
+function latestValue(key, type) {
+  const kpi = dashboardData.kpis[key];
+  if (type === "housekeeping") return kpi.average;
+  if (type === "donut") return null;
+  if (type === "sku_monthly") return null;
+  if (Array.isArray(kpi) && kpi.length) return kpi[kpi.length - 1].value ?? kpi[kpi.length - 1].fill_rate;
+  return null;
+}
+
+function renderKpiStrip() {
+  const strip = document.getElementById("kpiStrip");
+  strip.innerHTML = "";
+  KPI_DEFS.forEach(def => {
+    const val = latestValue(def.key, def.type);
+    const color = colorFor(def.type, val);
+    const card = document.createElement("div");
+    card.className = "kpi-card" + (def.key === activeKpi ? " active" : "");
+    card.onclick = () => { activeKpi = def.key; render(); };
+    card.innerHTML = `
+      <div class="label">${def.label}</div>
+      <div class="value">${color ? `<span class="dot ${color}"></span>` : ""}${
+        val !== null ? pct(val) : "—"
+      }</div>
+    `;
+    strip.appendChild(card);
+  });
+}
+
+function renderSelectorButtons() {
+  const wrap = document.getElementById("selectorButtons");
+  wrap.innerHTML = "";
+  KPI_DEFS.forEach(def => {
+    const btn = document.createElement("button");
+    btn.textContent = def.label;
+    btn.className = def.key === activeKpi ? "active" : "";
+    btn.onclick = () => { activeKpi = def.key; render(); };
+    wrap.appendChild(btn);
+  });
+}
+
+function renderFacts() {
+  const def = KPI_DEFS.find(d => d.key === activeKpi);
+  const kpi = dashboardData.kpis[activeKpi];
+  const facts = document.getElementById("factsStrip");
+  let count = Array.isArray(kpi) ? kpi.length : (kpi.weekly ? kpi.weekly.length : 0);
+  facts.innerHTML = `<span><b>${count}</b> data points</span>
+    <span>Source: <b>Operations Data.xlsx</b></span>
+    <span>Generated: <b>${new Date(dashboardData.generatedAt).toLocaleString()}</b></span>`;
+}
+
+function renderTable() {
+  const def = KPI_DEFS.find(d => d.key === activeKpi);
+  const kpi = dashboardData.kpis[activeKpi];
+  const container = document.getElementById("tableView");
+  let rows = [];
+
+  if (def.type === "housekeeping") {
+    rows = kpi.weekly.map(r => [r.week, pct(r.value_92m), pct(r.value_12m)]);
+    container.innerHTML = tableHtml(["Week", "92M", "12M"], rows);
+  } else if (def.type === "donut") {
+    rows = kpi.map(r => [r.picker, r.count, pct(r.share)]);
+    container.innerHTML = tableHtml(["Picker", "Count", "Share"], rows);
+  } else if (def.type === "sku_monthly") {
+    rows = kpi.map(r => [r.month, r.y2024, r.y2025, r.y2026_cpt, r.y2026_george ?? "—"]);
+    container.innerHTML = tableHtml(["Month", "2024", "2025", "2026 CPT", "2026 George"], rows);
+  } else if (def.type === "fill_rate") {
+    rows = kpi.map(r => [r.month, r.assembled, r.backorders, pct(r.fill_rate)]);
+    container.innerHTML = tableHtml(["Month", "Assembled", "Backorders", "Fill Rate"], rows);
+  } else {
+    rows = kpi.map(r => [r.label, pct(r.value)]);
+    container.innerHTML = tableHtml(["Period", "Value"], rows);
+  }
+}
+
+function tableHtml(headers, rows) {
+  return `<table>
+    <thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
+  </table>`;
+}
+
+function renderChart() {
+  const def = KPI_DEFS.find(d => d.key === activeKpi);
+  const kpi = dashboardData.kpis[activeKpi];
+  const ctx = document.getElementById("chartView").getContext("2d");
+  if (chartInstance) chartInstance.destroy();
+
+  if (def.type === "donut") {
+    chartInstance = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: kpi.map(r => r.picker),
+        datasets: [{ data: kpi.map(r => r.share), backgroundColor: paletteFor(kpi.length) }],
+      },
+      options: { plugins: { legend: { labels: { color: "#f2f4f8" } } } },
+    });
+    return;
+  }
+
+  let labels, values, targetValue;
+  if (def.type === "housekeeping") {
+    labels = kpi.weekly.map(r => r.week);
+    values = kpi.weekly.map(r => r.value_92m);
+    targetValue = 0.80;
+  } else if (def.type === "sku_monthly") {
+    labels = kpi.map(r => r.month);
+    values = kpi.map(r => r.y2026_cpt);
+    targetValue = null;
+  } else if (def.type === "fill_rate") {
+    labels = kpi.map(r => r.month);
+    values = kpi.map(r => r.fill_rate);
+    targetValue = 0.85;
+  } else {
+    labels = kpi.map(r => r.label);
+    values = kpi.map(r => r.value);
+    targetValue = def.type === "accuracy" ? 0.99 : 0.05;
+  }
+
+  const numeric = values.filter(v => v !== null && v !== undefined);
+  const min = Math.min(...numeric);
+  const max = Math.max(...numeric);
+  const pad = (max - min) * 0.15 || 0.05;
+
+  const datasets = [{
+    label: def.label,
+    data: values,
+    borderColor: "#4fd1ff",
+    backgroundColor: "rgba(79,209,255,0.15)",
+    borderDash: [4, 3],
+    borderWidth: 0,
+    pointRadius: 0,
+    tension: 0.25,
+  }];
+
+  // Trend line: white dotted
+  datasets.push({
+    label: "Trend",
+    data: values,
+    borderColor: "#ffffff",
+    borderDash: [2, 3],
+    borderWidth: 1.5,
+    pointRadius: 2,
+    fill: false,
+    tension: 0.25,
+  });
+
+  // Target line: green dashed
+  if (targetValue !== null) {
+    datasets.push({
+      label: "Target",
+      data: labels.map(() => targetValue),
+      borderColor: "#3ddc97",
+      borderDash: [6, 4],
+      borderWidth: 1.5,
+      pointRadius: 0,
+      fill: false,
+    });
+  }
+
+  chartInstance = new Chart(ctx, {
+    type: "line",
+    data: { labels, datasets },
+    options: {
+      plugins: { legend: { labels: { color: "#f2f4f8" } } },
+      scales: {
+        x: { ticks: { color: "#9aa4b8" }, grid: { color: "#232a3d" } },
+        y: {
+          min: min - pad,
+          max: max + pad,
+          ticks: { color: "#9aa4b8" },
+          grid: { color: "#232a3d" },
+        },
+      },
+    },
+  });
+}
+
+function paletteFor(n) {
+  const base = ["#4fd1ff", "#3ddc97", "#ffb454", "#ff5470", "#a78bfa", "#f472b6", "#facc15", "#38bdf8"];
+  const out = [];
+  for (let i = 0; i < n; i++) out.push(base[i % base.length]);
+  return out;
+}
+
+function render() {
+  renderKpiStrip();
+  renderSelectorButtons();
+  renderFacts();
+  if (activeView === "table") {
+    document.getElementById("tableView").style.display = "block";
+    document.getElementById("chartView").style.display = "none";
+    renderTable();
+  } else {
+    document.getElementById("tableView").style.display = "none";
+    document.getElementById("chartView").style.display = "block";
+    renderChart();
+  }
+}
+
+function renderAll() { render(); }
+
+document.getElementById("tableToggle").onclick = () => {
+  activeView = "table";
+  document.getElementById("tableToggle").classList.add("active");
+  document.getElementById("chartToggle").classList.remove("active");
+  render();
+};
+document.getElementById("chartToggle").onclick = () => {
+  activeView = "chart";
+  document.getElementById("chartToggle").classList.add("active");
+  document.getElementById("tableToggle").classList.remove("active");
+  render();
+};
+document.getElementById("refreshBtn").onclick = loadData;
+
+// Poll every 60 seconds, same as the original dashboard
+loadData();
+setInterval(loadData, 60000);
+</script>
+
+</body>
+</html>
