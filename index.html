@@ -367,7 +367,7 @@ function renderChart() {
         labels: kpi.map(r => r.picker),
         datasets: [{ data: kpi.map(r => r.share), backgroundColor: paletteFor(kpi.length) }],
       },
-      options: { plugins: { legend: { labels: { color: "#f2f4f8" } } } },
+      options: { plugins: { legend: { labels: { color: "#f2f4f8" } } }, radius: "70%" },
     });
     return;
   }
@@ -377,7 +377,11 @@ function renderChart() {
     const series2026 = kpi.map(r => r.y2026_cpt);
     const series2025 = kpi.map(r => r.y2025);
     const series2024 = kpi.map(r => r.y2024);
-    const allValues = [...series2026, ...series2025, ...series2024].filter(v => v !== null && v !== undefined);
+    const seriesGeorge = kpi.map(r => r.y2026_george);
+    const seriesCombined = kpi.map(r =>
+      (r.y2026_cpt == null && r.y2026_george == null) ? null : (r.y2026_cpt || 0) + (r.y2026_george || 0)
+    );
+    const allValues = [...series2026, ...series2025, ...series2024, ...seriesGeorge, ...seriesCombined].filter(v => v !== null && v !== undefined);
     const mn = Math.min(...allValues);
     const mx = Math.max(...allValues);
     const pad2 = (mx - mn) * 0.15 || 0.05;
@@ -388,6 +392,8 @@ function renderChart() {
         labels,
         datasets: [
           { label: "2026 CPT", data: series2026, borderColor: "#4fd1ff", backgroundColor: "rgba(79,209,255,0.15)", borderWidth: 2, pointRadius: 2, tension: 0.25 },
+          { label: "2026 George", data: seriesGeorge, borderColor: "#f472b6", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.25 },
+          { label: "2026 Combined", data: seriesCombined, borderColor: "#ffffff", borderWidth: 2, pointRadius: 2, fill: false, tension: 0.25 },
           { label: "2025", data: series2025, borderColor: "#3ddc97", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.25 },
           { label: "2024", data: series2024, borderColor: "#ffb454", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.25 },
         ],
