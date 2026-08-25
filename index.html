@@ -278,6 +278,17 @@ function topShareName(kpi) {
   return top.picker;
 }
 
+function latestCombinedSku(kpi) {
+  if (!Array.isArray(kpi)) return null;
+  for (let i = kpi.length - 1; i >= 0; i--) {
+    const r = kpi[i];
+    if (r.y2026_cpt !== null && r.y2026_cpt !== undefined || r.y2026_george !== null && r.y2026_george !== undefined) {
+      return (r.y2026_cpt || 0) + (r.y2026_george || 0);
+    }
+  }
+  return null;
+}
+
 function renderKpiStrip() {
   const strip = document.getElementById("kpiStrip");
   strip.innerHTML = "";
@@ -285,6 +296,9 @@ function renderKpiStrip() {
     let color = "", displayValue;
     if (def.type === "donut") {
       displayValue = topShareName(dashboardData.kpis[def.key]);
+    } else if (def.type === "sku_monthly") {
+      const combined = latestCombinedSku(dashboardData.kpis[def.key]);
+      displayValue = combined !== null ? combined.toLocaleString() : "—";
     } else {
       const val = latestValue(def.key, def.type);
       color = colorFor(def.type, val);
