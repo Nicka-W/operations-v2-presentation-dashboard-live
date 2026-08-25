@@ -256,27 +256,40 @@ async function loadData() {
 
 function latestValue(key, type) {
   const kpi = dashboardData.kpis[key];
-  if (type === "housekeeping") return kpi.average;
+  if (type === "housekeeping") {
+    const w = kpi.weekly;
+    return w && w.length ? w[w.length - 1].value_92m : null;
+  }
   if (type === "donut") return null;
   if (type === "sku_monthly") return null;
   if (Array.isArray(kpi) && kpi.length) return kpi[kpi.length - 1].value ?? kpi[kpi.length - 1].fill_rate;
   return null;
 }
 
+function topShareName(kpi) {
+  if (!Array.isArray(kpi) || !kpi.length) return "—";
+  const top = kpi.reduce((a, b) => (b.share > a.share ? b : a));
+  return top.picker;
+}
+
 function renderKpiStrip() {
   const strip = document.getElementById("kpiStrip");
   strip.innerHTML = "";
   KPI_DEFS.forEach(def => {
-    const val = latestValue(def.key, def.type);
-    const color = colorFor(def.type, val);
+    let color = "", displayValue;
+    if (def.type === "donut") {
+      displayValue = topShareName(dashboardData.kpis[def.key]);
+    } else {
+      const val = latestValue(def.key, def.type);
+      color = colorFor(def.type, val);
+      displayValue = val !== null ? pct(val) : "—";
+    }
     const card = document.createElement("div");
     card.className = "kpi-card" + (def.key === activeKpi ? " active" : "");
     card.onclick = () => { activeKpi = def.key; render(); };
     card.innerHTML = `
       <div class="label">${def.label}</div>
-      <div class="value">${color ? `<span class="dot ${color}"></span>` : ""}${
-        val !== null ? pct(val) : "—"
-      }</div>
+      <div class="value">${color ? `<span class="dot ${color}"></span>` : ""}${displayValue}</div>
     `;
     strip.appendChild(card);
   });
@@ -353,15 +366,42 @@ function renderChart() {
     return;
   }
 
+  if (def.type === "sku_monthly") {
+    const labels = kpi.map(r => r.month);
+    const series2026 = kpi.map(r => r.y2026_cpt);
+    const series2025 = kpi.map(r => r.y2025);
+    const series2024 = kpi.map(r => r.y2024);
+    const allValues = [...series2026, ...series2025, ...series2024].filter(v => v !== null && v !== undefined);
+    const mn = Math.min(...allValues);
+    const mx = Math.max(...allValues);
+    const pad2 = (mx - mn) * 0.15 || 0.05;
+
+    chartInstance = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          { label: "2026 CPT", data: series2026, borderColor: "#4fd1ff", backgroundColor: "rgba(79,209,255,0.15)", borderWidth: 2, pointRadius: 2, tension: 0.25 },
+          { label: "2025", data: series2025, borderColor: "#3ddc97", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.25 },
+          { label: "2024", data: series2024, borderColor: "#ffb454", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.25 },
+        ],
+      },
+      options: {
+        plugins: { legend: { labels: { color: "#f2f4f8" } } },
+        scales: {
+          x: { ticks: { color: "#9aa4b8" }, grid: { color: "#232a3d" } },
+          y: { min: mn - pad2, max: mx + pad2, ticks: { color: "#9aa4b8" }, grid: { color: "#232a3d" } },
+        },
+      },
+    });
+    return;
+  }
+
   let labels, values, targetValue;
   if (def.type === "housekeeping") {
     labels = kpi.weekly.map(r => r.week);
     values = kpi.weekly.map(r => r.value_92m);
     targetValue = 0.80;
-  } else if (def.type === "sku_monthly") {
-    labels = kpi.map(r => r.month);
-    values = kpi.map(r => r.y2026_cpt);
-    targetValue = null;
   } else if (def.type === "fill_rate") {
     labels = kpi.map(r => r.month);
     values = kpi.map(r => r.fill_rate);
@@ -369,7 +409,7 @@ function renderChart() {
   } else {
     labels = kpi.map(r => r.label);
     values = kpi.map(r => r.value);
-    targetValue = def.type === "accuracy" ? 0.99 : 0.05;
+    targetValue = def.type === "accuracy" ? 1.0 : null;
   }
 
   const numeric = values.filter(v => v !== null && v !== undefined);
@@ -380,6 +420,13 @@ function renderChart() {
   // These 5 KPIs are percentages, so lock the axis to 0-100% in steps of 10
   const fixedRangeKpis = ["housekeeping", "container-jhb", "container-george", "dispatch-accuracy", "assembly-backorders"];
   const useFixedRange = fixedRangeKpis.includes(activeKpi);
+
+  // Urgent Orders: 0% up to the highest value in the data, in steps of 10%
+  const isUrgent = activeKpi === "urgent-orders";
+  const urgentMax = isUrgent ? Math.max(0.1, Math.ceil(Math.max(...numeric, 0) * 10) / 10) : null;
+
+  // These KPIs asked to hide their raw-value line from the legend (Trend/Target stay visible)
+  const hideMainLegend = ["housekeeping", "container-jhb", "container-george", "dispatch-accuracy", "urgent-orders"].includes(activeKpi);
 
   const datasets = [{
     label: def.label,
@@ -421,12 +468,28 @@ function renderChart() {
     type: "line",
     data: { labels, datasets },
     options: {
-      plugins: { legend: { labels: { color: "#f2f4f8" } } },
+      plugins: {
+        legend: {
+          labels: {
+            color: "#f2f4f8",
+            filter: (item) => !(hideMainLegend && item.text === def.label),
+          },
+        },
+      },
       scales: {
         x: { ticks: { color: "#9aa4b8" }, grid: { color: "#232a3d" } },
         y: useFixedRange ? {
           min: 0,
           max: 1,
+          ticks: {
+            stepSize: 0.1,
+            color: "#9aa4b8",
+            callback: (v) => Math.round(v * 100) + "%",
+          },
+          grid: { color: "#232a3d" },
+        } : isUrgent ? {
+          min: 0,
+          max: urgentMax,
           ticks: {
             stepSize: 0.1,
             color: "#9aa4b8",
