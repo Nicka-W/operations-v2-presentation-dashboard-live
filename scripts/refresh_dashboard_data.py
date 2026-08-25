@@ -44,7 +44,7 @@ import openpyxl
 # single .xlsx in the same folder (see find_workbook_fallback()).
 WORKBOOK_PATH = os.environ.get(
     "OPS_V2_WORKBOOK_PATH",
-    r"C:\Users\Dell\OneDrive\002.Operations\Dashboard\Operations-V2\Operations Data.xlsx",
+    r"C:\Users\HP\OneDrive\Operations\Dashboard\operations-v2-dashboard\Operations Data.xlsx",
 )
 
 SHEET_NAME = "DATA"
