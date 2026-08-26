@@ -63,7 +63,7 @@
   .brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
   }
   .brand img {
     height: 62px;
@@ -73,19 +73,30 @@
   }
   .brand-divider {
     width: 1px;
-    height: 22px;
+    height: 34px;
     background: var(--panel-border);
+  }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .eyebrow {
+    font-family: "Inter", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--flame-1);
   }
   h1 {
     font-family: "Sora", "Inter", sans-serif;
-    font-size: 21px;
+    font-size: 30px;
     margin: 0;
-    letter-spacing: -0.01em;
-    font-weight: 700;
-    background: linear-gradient(90deg, var(--brand-blue-light), var(--flame-1));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    color: #f7f9ff;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
   }
   .brand-stripe {
     height: 3px;
@@ -267,7 +278,10 @@
   <div class="brand">
     <img src="logo.png" alt="Hydrofire logo">
     <div class="brand-divider"></div>
-    <h1>Cape Town Warehouse Dashboard</h1>
+    <div class="brand-text">
+      <span class="eyebrow">Hydrofire Operations</span>
+      <h1>Cape Town Warehouse Dashboard</h1>
+    </div>
   </div>
   <div class="latest-reading">Latest reading: <b id="latestReading">—</b></div>
 </header>
