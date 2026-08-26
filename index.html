@@ -186,8 +186,6 @@
   </div>
 </div>
 
-<div class="facts-strip" id="factsStrip"></div>
-
 <div class="panel">
   <div id="tableView"></div>
   <canvas id="chartView" style="display:none;"></canvas>
@@ -543,7 +541,7 @@ function paletteFor(n) {
 function render() {
   renderKpiStrip();
   renderSelectorButtons();
-  renderFacts();
+  // facts strip removed from dashboard
   if (activeView === "table") {
     document.getElementById("tableView").style.display = "block";
     document.getElementById("chartView").style.display = "none";
