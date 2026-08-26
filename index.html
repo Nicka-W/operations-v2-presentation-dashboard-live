@@ -156,33 +156,10 @@
   .controls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 4px 28px 0;
     flex-wrap: wrap;
     gap: 10px;
-  }
-  .selector-buttons {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .selector-buttons button {
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    color: var(--text-dim);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    font-family: "Inter", sans-serif;
-    cursor: pointer;
-    transition: border-color 0.15s ease, color 0.15s ease;
-  }
-  .selector-buttons button.active {
-    color: #0a0d16;
-    background: linear-gradient(90deg, var(--brand-blue-light), var(--flame-1));
-    border-color: var(--flame-1);
-    font-weight: 600;
   }
   .toggle {
     display: flex;
@@ -228,6 +205,37 @@
 
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--panel-border); }
+
+  .chart-wrap {
+    position: relative;
+    height: 320px;
+  }
+  .chart-wrap canvas {
+    position: relative;
+    z-index: 1;
+  }
+  .chart-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 85%, rgba(245, 132, 31, 0.24), transparent 42%),
+      radial-gradient(circle at 55% 95%, rgba(239, 65, 54, 0.20), transparent 46%),
+      radial-gradient(circle at 80% 88%, rgba(193, 39, 45, 0.16), transparent 40%);
+    filter: blur(30px);
+    animation: emberFlicker 4.5s ease-in-out infinite alternate;
+  }
+  @keyframes emberFlicker {
+    0%   { opacity: 0.55; transform: scale(1) translateY(0); }
+    35%  { opacity: 0.85; transform: scale(1.04) translateY(-6px); }
+    65%  { opacity: 0.65; transform: scale(0.98) translateY(3px); }
+    100% { opacity: 0.9;  transform: scale(1.03) translateY(-3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chart-wrap::before { animation: none; opacity: 0.7; }
+  }
   th { color: var(--text-dim); font-weight: 600; text-transform: uppercase; font-size: 11px; }
 
   .refresh-row {
@@ -273,7 +281,6 @@
 <div class="kpi-strip" id="kpiStrip"></div>
 
 <div class="controls">
-  <div class="selector-buttons" id="selectorButtons"></div>
   <div class="toggle">
     <button id="tableToggle" class="active">Table</button>
     <button id="chartToggle">Chart</button>
@@ -282,7 +289,9 @@
 
 <div class="panel">
   <div id="tableView"></div>
-  <canvas id="chartView" style="display:none;"></canvas>
+  <div class="chart-wrap" id="chartWrap" style="display:none;">
+    <canvas id="chartView"></canvas>
+  </div>
 </div>
 
 <script>
@@ -428,18 +437,6 @@ function renderKpiStrip() {
   });
 }
 
-function renderSelectorButtons() {
-  const wrap = document.getElementById("selectorButtons");
-  wrap.innerHTML = "";
-  KPI_DEFS.forEach(def => {
-    const btn = document.createElement("button");
-    btn.textContent = def.label;
-    btn.className = def.key === activeKpi ? "active" : "";
-    btn.onclick = () => { activeKpi = def.key; render(); };
-    wrap.appendChild(btn);
-  });
-}
-
 function renderFacts() {
   const def = KPI_DEFS.find(d => d.key === activeKpi);
   const kpi = dashboardData.kpis[activeKpi];
@@ -494,7 +491,7 @@ function renderChart() {
         labels: kpi.map(r => r.picker),
         datasets: [{ data: kpi.map(r => r.share), backgroundColor: paletteFor(kpi.length) }],
       },
-      options: { plugins: { legend: { labels: { color: "#f2f4f8", usePointStyle: true, pointStyle: "circle", padding: 14 } } }, radius: "70%" },
+      options: { maintainAspectRatio: false, plugins: { legend: { labels: { color: "#f2f4f8", usePointStyle: true, pointStyle: "circle", padding: 14 } } }, radius: "70%" },
     });
     return;
   }
@@ -530,6 +527,7 @@ function renderChart() {
         ],
       },
       options: {
+        maintainAspectRatio: false,
         plugins: { legend: { labels: { color: "#f2f4f8", usePointStyle: true, pointStyle: "circle", padding: 16 } } },
         scales: {
           x: { ticks: { color: "#9aa4b8" }, grid: { color: "#232a3d" } },
@@ -618,6 +616,7 @@ function renderChart() {
     type: "line",
     data: { labels, datasets },
     options: {
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           labels: {
@@ -669,15 +668,14 @@ function paletteFor(n) {
 
 function render() {
   renderKpiStrip();
-  renderSelectorButtons();
   // facts strip removed from dashboard
   if (activeView === "table") {
     document.getElementById("tableView").style.display = "block";
-    document.getElementById("chartView").style.display = "none";
+    document.getElementById("chartWrap").style.display = "none";
     renderTable();
   } else {
     document.getElementById("tableView").style.display = "none";
-    document.getElementById("chartView").style.display = "block";
+    document.getElementById("chartWrap").style.display = "block";
     renderChart();
   }
 }
