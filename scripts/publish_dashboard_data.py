@@ -17,10 +17,16 @@ import os
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# On Windows, prevent each subprocess call (git, python) from briefly
+# flashing its own console window when this script is run via pythonw.exe.
+NO_WINDOW = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+
 
 def run(cmd, **kwargs):
     print(f"[publish] $ {' '.join(cmd)}")
-    result = subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True, **kwargs)
+    result = subprocess.run(
+        cmd, cwd=REPO_ROOT, capture_output=True, text=True, creationflags=NO_WINDOW, **kwargs
+    )
     if result.stdout.strip():
         print(result.stdout.strip())
     if result.stderr.strip():
@@ -73,6 +79,7 @@ def main():
     refresh = subprocess.run(
         [sys.executable, os.path.join(REPO_ROOT, "scripts", "refresh_dashboard_data.py")],
         cwd=REPO_ROOT,
+        creationflags=NO_WINDOW,
     )
     if refresh.returncode != 0:
         print("[publish] ERROR: refresh_dashboard_data.py failed.")
