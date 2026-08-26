@@ -105,10 +105,15 @@
   .latest-reading b { color: var(--text); }
 
   .kpi-strip {
-    display: grid;
-    grid-template-columns: repeat(8, minmax(120px, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
     gap: 10px;
     padding: 12px 28px;
+    overflow-x: auto;
+  }
+  .kpi-card {
+    flex: 1 1 0;
+    min-width: 100px;
   }
   .kpi-card {
     background: var(--panel);
