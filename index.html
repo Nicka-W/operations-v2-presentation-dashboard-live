@@ -30,6 +30,24 @@
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: -20%;
+    left: 0;
+    width: 100%;
+    height: 480px;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(27, 117, 188, 0.16), transparent 55%),
+      radial-gradient(circle at 32% 10%, rgba(245, 132, 31, 0.10), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  header, .brand-stripe, .refresh-row, .kpi-strip, .controls, .facts-strip, .panel {
+    position: relative;
+    z-index: 1;
   }
   header {
     padding: 20px 28px 8px;
@@ -45,10 +63,10 @@
     gap: 14px;
   }
   .brand img {
-    height: 46px;
+    height: 62px;
     width: auto;
     display: block;
-    filter: drop-shadow(0 0 14px rgba(239, 65, 54, 0.25));
+    filter: drop-shadow(0 0 22px rgba(239, 65, 54, 0.35));
   }
   .brand-divider {
     width: 1px;
@@ -56,18 +74,21 @@
     background: var(--panel-border);
   }
   h1 {
-    font-size: 20px;
+    font-size: 21px;
     margin: 0;
-    letter-spacing: 0.02em;
-    font-weight: 600;
-    color: var(--text-dim);
+    letter-spacing: 0.01em;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--brand-blue-light), var(--flame-1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .brand-stripe {
-    height: 4px;
+    height: 3px;
     margin: 0 28px;
     border-radius: 999px;
     background: linear-gradient(90deg, var(--brand-blue) 0%, var(--flame-1) 55%, var(--flame-3) 100%);
-    opacity: 1;
+    box-shadow: 0 0 16px rgba(239, 65, 54, 0.35), 0 0 16px rgba(27, 117, 188, 0.25);
   }
   .latest-reading {
     background: var(--panel);
@@ -183,6 +204,10 @@
     border-radius: 12px;
     padding: 18px;
     min-height: 360px;
+    transition: border-color 0.2s ease;
+  }
+  .panel:hover {
+    border-color: rgba(79, 163, 224, 0.3);
   }
 
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
