@@ -7,17 +7,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #0b0e14;
+    --bg: #0a0d16;
     --panel: #131826;
     --panel-border: #232a3d;
     --text: #f2f4f8;
     --text-dim: #9aa4b8;
-    --accent: #4fd1ff;
     --red: #ff5470;
     --orange: #ffb454;
     --green: #3ddc97;
     --target-line: #3ddc97;
     --trend-line: #ffffff;
+    --brand-blue: #1b75bc;
+    --brand-blue-light: #4fa3e0;
+    --flame-1: #f5841f;
+    --flame-2: #ef4136;
+    --flame-3: #c1272d;
+    --accent: var(--brand-blue-light);
   }
   * { box-sizing: border-box; }
   body {
@@ -29,19 +34,43 @@
   header {
     padding: 20px 28px 8px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 8px;
   }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand img {
+    height: 30px;
+    width: auto;
+    display: block;
+  }
+  .brand-divider {
+    width: 1px;
+    height: 22px;
+    background: var(--panel-border);
+  }
   h1 {
-    font-size: 22px;
+    font-size: 20px;
     margin: 0;
     letter-spacing: 0.02em;
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+  .brand-stripe {
+    height: 3px;
+    margin: 0 28px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--brand-blue) 0%, var(--flame-1) 55%, var(--flame-3) 100%);
+    opacity: 0.85;
   }
   .latest-reading {
     background: var(--panel);
-    border: 1px solid var(--panel-border);
+    border: 1px solid rgba(79, 163, 224, 0.35);
     border-radius: 999px;
     padding: 6px 16px;
     font-size: 13px;
@@ -63,8 +92,14 @@
     cursor: pointer;
     transition: border-color 0.15s ease, transform 0.1s ease;
   }
-  .kpi-card:hover { transform: translateY(-2px); }
-  .kpi-card.active { border-color: var(--accent); }
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(27, 117, 188, 0.18);
+  }
+  .kpi-card.active {
+    border-color: var(--brand-blue-light);
+    box-shadow: 0 0 0 1px rgba(79, 163, 224, 0.25);
+  }
   .kpi-card .label {
     font-size: 11px;
     color: var(--text-dim);
@@ -167,9 +202,14 @@
 <body>
 
 <header>
-  <h1>Hydrofire Cape Town Warehouse Dashboard</h1>
+  <div class="brand">
+    <img src="logo.png" alt="Hydrofire logo">
+    <div class="brand-divider"></div>
+    <h1>Cape Town Warehouse Dashboard</h1>
+  </div>
   <div class="latest-reading">Latest reading: <b id="latestReading">—</b></div>
 </header>
+<div class="brand-stripe"></div>
 
 <div class="refresh-row">
   <button id="refreshBtn">Refresh Now</button>
@@ -403,7 +443,7 @@ function renderChart() {
       data: {
         labels,
         datasets: [
-          { label: "2026 CPT", data: series2026, borderColor: "#4fd1ff", backgroundColor: "rgba(79,209,255,0.15)", borderWidth: 2, pointRadius: 2, tension: 0.25 },
+          { label: "2026 CPT", data: series2026, borderColor: "#4fa3e0", backgroundColor: "rgba(79,163,224,0.15)", borderWidth: 2, pointRadius: 2, tension: 0.25 },
           { label: "2026 George", data: seriesGeorge, borderColor: "#f472b6", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.25 },
           { label: "2026 Combined", data: seriesCombined, borderColor: "#ffffff", borderWidth: 2, pointRadius: 2, fill: false, tension: 0.25 },
           { label: "2025", data: series2025, borderColor: "#3ddc97", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.25 },
@@ -455,8 +495,8 @@ function renderChart() {
   const datasets = [{
     label: def.label,
     data: values,
-    borderColor: "#4fd1ff",
-    backgroundColor: "rgba(79,209,255,0.15)",
+    borderColor: "#4fa3e0",
+    backgroundColor: "rgba(79,163,224,0.15)",
     borderDash: [4, 3],
     borderWidth: 0,
     pointRadius: 0,
@@ -532,7 +572,7 @@ function renderChart() {
 }
 
 function paletteFor(n) {
-  const base = ["#4fd1ff", "#3ddc97", "#ffb454", "#ff5470", "#a78bfa", "#f472b6", "#facc15", "#38bdf8"];
+  const base = ["#4fa3e0", "#3ddc97", "#ffb454", "#ff5470", "#a78bfa", "#f472b6", "#facc15", "#38bdf8"];
   const out = [];
   for (let i = 0; i < n; i++) out.push(base[i % base.length]);
   return out;
