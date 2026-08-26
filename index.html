@@ -45,9 +45,10 @@
     gap: 14px;
   }
   .brand img {
-    height: 30px;
+    height: 46px;
     width: auto;
     display: block;
+    filter: drop-shadow(0 0 14px rgba(239, 65, 54, 0.25));
   }
   .brand-divider {
     width: 1px;
@@ -62,11 +63,11 @@
     color: var(--text-dim);
   }
   .brand-stripe {
-    height: 3px;
+    height: 4px;
     margin: 0 28px;
     border-radius: 999px;
     background: linear-gradient(90deg, var(--brand-blue) 0%, var(--flame-1) 55%, var(--flame-3) 100%);
-    opacity: 0.85;
+    opacity: 1;
   }
   .latest-reading {
     background: var(--panel);
@@ -87,10 +88,11 @@
   .kpi-card {
     background: var(--panel);
     border: 1px solid var(--panel-border);
+    border-left: 3px solid transparent;
     border-radius: 10px;
     padding: 12px;
     cursor: pointer;
-    transition: border-color 0.15s ease, transform 0.1s ease;
+    transition: border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
   }
   .kpi-card:hover {
     transform: translateY(-2px);
@@ -98,6 +100,7 @@
   }
   .kpi-card.active {
     border-color: var(--brand-blue-light);
+    border-left: 3px solid var(--flame-1);
     box-shadow: 0 0 0 1px rgba(79, 163, 224, 0.25);
   }
   .kpi-card .label {
@@ -139,9 +142,10 @@
     cursor: pointer;
   }
   .selector-buttons button.active {
-    color: var(--bg);
-    background: var(--accent);
-    border-color: var(--accent);
+    color: #0a0d16;
+    background: linear-gradient(90deg, var(--brand-blue-light), var(--flame-1));
+    border-color: var(--flame-1);
+    font-weight: 600;
   }
   .toggle {
     display: flex;
@@ -157,7 +161,11 @@
     font-size: 12px;
     cursor: pointer;
   }
-  .toggle button.active { background: var(--accent); color: var(--bg); }
+  .toggle button.active {
+    background: linear-gradient(90deg, var(--brand-blue-light), var(--flame-1));
+    color: #0a0d16;
+    font-weight: 600;
+  }
 
   .facts-strip {
     padding: 12px 28px 0;
@@ -195,6 +203,11 @@
     border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .refresh-row button:hover {
+    border-color: var(--flame-1);
+    color: var(--flame-1);
   }
   .refresh-row span { font-size: 11px; color: var(--text-dim); }
 </style>
