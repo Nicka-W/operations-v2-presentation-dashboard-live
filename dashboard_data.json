@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-02T05:59:26.718709+00:00",
-  "sourceModifiedAt": "2026-09-01T20:14:51+00:00",
+  "generatedAt": "2026-09-02T06:13:12.243831+00:00",
+  "sourceModifiedAt": "2026-09-02T06:09:32.867593+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -687,8 +687,8 @@
         "month": "Sept",
         "y2024": 3741,
         "y2025": 5453,
-        "y2026_cpt": ",407",
-        "y2026_george": ",17"
+        "y2026_cpt": 407,
+        "y2026_george": 17
       },
       {
         "month": "Oct",
