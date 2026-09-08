@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T19:49:37.025595+00:00",
+  "generatedAt": "2026-09-08T19:51:33.177657+00:00",
   "sourceModifiedAt": "2026-09-08T19:45:41+00:00",
   "kpis": {
     "housekeeping": {
@@ -615,28 +615,28 @@
     "sku-share": [
       {
         "picker": "Ali",
-        "count": 0,
-        "share": 0
+        "count": 10,
+        "share": 0.004653327128897162
       },
       {
         "picker": "Angelo",
-        "count": 6,
-        "share": 0.014742014742014743
+        "count": 93,
+        "share": 0.043275942298743604
       },
       {
         "picker": "Charlie",
-        "count": 96,
-        "share": 0.23587223587223588
+        "count": 618,
+        "share": 0.28757561656584457
       },
       {
         "picker": "Bongani",
-        "count": 100,
-        "share": 0.2457002457002457
+        "count": 548,
+        "share": 0.2550023266635644
       },
       {
         "picker": "Endwell",
-        "count": 205,
-        "share": 0.5036855036855037
+        "count": 880,
+        "share": 0.4094927873429502
       }
     ],
     "sku-monthly": [
