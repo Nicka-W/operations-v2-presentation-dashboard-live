@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-15T20:44:37.244904+00:00",
-  "sourceModifiedAt": "2026-09-15T20:05:48+00:00",
+  "generatedAt": "2026-09-15T21:09:16.972403+00:00",
+  "sourceModifiedAt": "2026-09-15T20:58:34.507438+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -464,7 +464,11 @@
       },
       {
         "label": 37,
-        "value": 0.538
+        "value": 0.429
+      },
+      {
+        "label": 38,
+        "value": 0.158
       }
     ],
     "dispatch-accuracy": [
@@ -615,33 +619,37 @@
       {
         "label": 37,
         "value": 0.993
+      },
+      {
+        "label": 38,
+        "value": 1
       }
     ],
     "sku-share": [
       {
         "picker": "Ali",
         "count": 10,
-        "share": 0.004653327128897162
+        "share": 0.0026602819898909284
       },
       {
         "picker": "Angelo",
-        "count": 93,
-        "share": 0.043275942298743604
+        "count": 141,
+        "share": 0.03750997605746209
       },
       {
         "picker": "Charlie",
-        "count": 618,
-        "share": 0.28757561656584457
+        "count": 1150,
+        "share": 0.30593242883745675
       },
       {
         "picker": "Bongani",
-        "count": 548,
-        "share": 0.2550023266635644
+        "count": 1159,
+        "share": 0.3083266826283586
       },
       {
         "picker": "Endwell",
-        "count": 880,
-        "share": 0.4094927873429502
+        "count": 1299,
+        "share": 0.3455706304868316
       }
     ],
     "sku-monthly": [
@@ -705,8 +713,8 @@
         "month": "Sept",
         "y2024": 3741,
         "y2025": 5453,
-        "y2026_cpt": 2149,
-        "y2026_george": 151
+        "y2026_cpt": 3759,
+        "y2026_george": 223
       },
       {
         "month": "Oct",
@@ -782,8 +790,8 @@
       {
         "month": "Sept",
         "assembled": 5,
-        "backorders": 2,
-        "fill_rate": 0.6
+        "backorders": 3,
+        "fill_rate": 0.4
       },
       {
         "month": "Oct",
