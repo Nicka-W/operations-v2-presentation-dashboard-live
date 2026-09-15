@@ -17,6 +17,10 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_PATH = os.path.join(SCRIPT_DIR, "local_autopublish.log")
 PUBLISH_SCRIPT = os.path.join(SCRIPT_DIR, "publish_dashboard_data.py")
 
+# Belt-and-braces: prevent this subprocess from flashing its own console
+# window, even though it's normally launched via pythonw.exe already.
+NO_WINDOW = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+
 
 def log(message):
     timestamp = datetime.datetime.now().isoformat(timespec="seconds")
@@ -32,6 +36,7 @@ def main():
             capture_output=True,
             text=True,
             timeout=180,
+            creationflags=NO_WINDOW,
         )
         if result.stdout:
             log(result.stdout.strip())
