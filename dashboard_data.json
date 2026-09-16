@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-15T21:50:29.773230+00:00",
-  "sourceModifiedAt": "2026-09-15T20:58:34.507438+00:00",
+  "generatedAt": "2026-09-16T06:35:30.490598+00:00",
+  "sourceModifiedAt": "2026-09-16T06:15:13+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -192,7 +192,7 @@
         },
         {
           "week": 38,
-          "value_92m": 0.87,
+          "value_92m": 0.92,
           "value_12m": null
         }
       ]
