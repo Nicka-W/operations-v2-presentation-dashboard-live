@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T19:14:39.947666+00:00",
+  "generatedAt": "2026-09-22T19:15:38.678955+00:00",
   "sourceModifiedAt": "2026-09-22T19:04:05+00:00",
   "kpis": {
     "housekeeping": {
@@ -473,7 +473,11 @@
       },
       {
         "label": 38,
-        "value": 0.158
+        "value": 0.15
+      },
+      {
+        "label": 39,
+        "value": 0.333
       }
     ],
     "dispatch-accuracy": [
