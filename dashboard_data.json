@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-29T18:51:37.158081+00:00",
-  "sourceModifiedAt": "2026-09-29T18:32:10+00:00",
+  "generatedAt": "2026-09-29T18:52:41.404812+00:00",
+  "sourceModifiedAt": "2026-09-29T18:52:08+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -482,11 +482,11 @@
       },
       {
         "label": 39,
-        "value": 0.333
+        "value": 0.281
       },
       {
         "label": 40,
-        "value": null
+        "value": 0.6
       }
     ],
     "dispatch-accuracy": [
@@ -645,6 +645,10 @@
       {
         "label": 39,
         "value": 0.994
+      },
+      {
+        "label": 40,
+        "value": 1
       }
     ],
     "sku-share": [
