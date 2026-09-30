@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-30T07:03:29.526343+00:00",
-  "sourceModifiedAt": "2026-09-29T19:02:52+00:00",
+  "generatedAt": "2026-09-30T07:04:30.198895+00:00",
+  "sourceModifiedAt": "2026-09-30T07:04:07.267908+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -815,9 +815,9 @@
       },
       {
         "month": "Sept",
-        "assembled": 10,
+        "assembled": 15,
         "backorders": 3,
-        "fill_rate": 0.7
+        "fill_rate": 0.8
       },
       {
         "month": "Oct",
