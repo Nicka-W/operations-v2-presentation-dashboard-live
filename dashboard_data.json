@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-13T22:03:39.866006+00:00",
-  "sourceModifiedAt": "2026-10-13T22:01:18+00:00",
+  "generatedAt": "2026-10-13T22:04:41.572301+00:00",
+  "sourceModifiedAt": "2026-10-13T22:03:16+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -681,27 +681,27 @@
       {
         "picker": "Ali",
         "count": 98,
-        "share": 0.06102117061021171
+        "share": 0.04904904904904905
       },
       {
         "picker": "Angelo",
         "count": 115,
-        "share": 0.07160647571606475
+        "share": 0.05755755755755756
       },
       {
         "picker": "Charlie",
         "count": 761,
-        "share": 0.4738480697384807
+        "share": 0.3808808808808809
       },
       {
         "picker": "Bongani",
-        "count": 112,
-        "share": 0.06973848069738481
+        "count": 115,
+        "share": 0.05755755755755756
       },
       {
         "picker": "Endwell",
-        "count": 520,
-        "share": 0.32378580323785805
+        "count": 909,
+        "share": 0.45495495495495497
       }
     ],
     "sku-monthly": [
@@ -773,7 +773,7 @@
         "y2024": 3941,
         "y2025": 5293,
         "y2026_cpt": 1998,
-        "y2026_george": 125
+        "y2026_george": 269
       },
       {
         "month": "Nov",
