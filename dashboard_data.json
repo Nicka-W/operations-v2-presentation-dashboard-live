@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-21T02:29:37.783310+00:00",
-  "sourceModifiedAt": "2026-10-21T02:26:06+00:00",
+  "generatedAt": "2026-10-21T02:30:38.721379+00:00",
+  "sourceModifiedAt": "2026-10-21T02:29:53+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -517,7 +517,11 @@
       },
       {
         "label": 42,
-        "value": 0.308
+        "value": 0.379
+      },
+      {
+        "label": 43,
+        "value": 0.611
       }
     ],
     "dispatch-accuracy": [
