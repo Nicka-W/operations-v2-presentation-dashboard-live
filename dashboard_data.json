@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-21T02:22:38.675194+00:00",
-  "sourceModifiedAt": "2026-10-21T02:22:32.686424+00:00",
+  "generatedAt": "2026-10-21T02:23:41.603119+00:00",
+  "sourceModifiedAt": "2026-10-21T02:22:48+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -290,6 +290,10 @@
       {
         "label": 17,
         "value": 1
+      },
+      {
+        "label": 18,
+        "value": 0.9987
       }
     ],
     "container-george": [
@@ -340,6 +344,10 @@
       {
         "label": 12,
         "value": 0.9983
+      },
+      {
+        "label": 13,
+        "value": null
       }
     ],
     "urgent-orders": [
