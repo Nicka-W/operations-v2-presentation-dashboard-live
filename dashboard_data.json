@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-27T19:04:38.921272+00:00",
+  "generatedAt": "2026-10-27T19:05:42.547407+00:00",
   "sourceModifiedAt": "2026-10-27T18:59:20+00:00",
   "kpis": {
     "housekeeping": {
@@ -881,9 +881,9 @@
       },
       {
         "month": "Oct",
-        "assembled": 4,
-        "backorders": 3,
-        "fill_rate": 0.25
+        "assembled": 6,
+        "backorders": 2,
+        "fill_rate": 0.6666666666666667
       },
       {
         "month": "Nov",
