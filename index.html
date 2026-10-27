@@ -2,718 +2,538 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Hydrofire Cape Town Warehouse Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0d16;
-    --panel: #131826;
-    --panel-border: #232a3d;
-    --text: #f2f4f8;
-    --text-dim: #9aa4b8;
-    --red: #ff5470;
-    --orange: #ffb454;
-    --green: #3ddc97;
-    --target-line: #3ddc97;
-    --trend-line: #ffffff;
-    --brand-blue: #1b75bc;
-    --brand-blue-light: #4fa3e0;
-    --flame-1: #f5841f;
-    --flame-2: #ef4136;
-    --flame-3: #c1272d;
-    --accent: var(--brand-blue-light);
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    position: relative;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    top: -20%;
-    left: 0;
-    width: 100%;
-    height: 480px;
-    background:
-      radial-gradient(circle at 8% 0%, rgba(27, 117, 188, 0.16), transparent 55%),
-      radial-gradient(circle at 32% 10%, rgba(245, 132, 31, 0.10), transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-  header, .brand-stripe, .refresh-row, .kpi-strip, .controls, .facts-strip, .panel {
-    position: relative;
-    z-index: 1;
-  }
-  header {
-    padding: 20px 28px 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .brand img {
-    height: 62px;
-    width: auto;
-    display: block;
-    filter: drop-shadow(0 0 22px rgba(239, 65, 54, 0.35));
-  }
-  .brand-divider {
-    width: 1px;
-    height: 34px;
-    background: var(--panel-border);
-  }
-  .brand-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .eyebrow {
-    font-family: "Inter", sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--flame-1);
-  }
-  h1 {
-    font-family: "Sora", "Inter", sans-serif;
-    font-size: 30px;
-    margin: 0;
-    letter-spacing: -0.02em;
-    font-weight: 800;
-    color: #f7f9ff;
-    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
-  }
-  .brand-stripe {
-    height: 3px;
-    margin: 0 28px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--brand-blue) 0%, var(--flame-1) 55%, var(--flame-3) 100%);
-    box-shadow: 0 0 16px rgba(239, 65, 54, 0.35), 0 0 16px rgba(27, 117, 188, 0.25);
-  }
-  .latest-reading {
-    background: var(--panel);
-    border: 1px solid rgba(79, 163, 224, 0.35);
-    border-radius: 999px;
-    padding: 6px 16px;
-    font-size: 13px;
-    color: var(--text-dim);
-  }
-  .latest-reading b { color: var(--text); }
+:root{
+  --bg:#0a0d16; --panel:#131826; --panel2:#171d2e; --line:#232a3d;
+  --text:#f2f4f8; --muted:#9aa4b8;
+  --blue:#1b75bc; --blue-l:#4fa3e0; --f1:#f5841f; --f2:#ef4136; --f3:#c1272d;
+  --good:#3ddc97; --warn:#ffb454; --bad:#ff5470;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:var(--bg);color:var(--text);font:14px/1.5 'Inter',-apple-system,'Segoe UI',Roboto,Arial,sans-serif;position:relative}
+body::before{content:"";position:fixed;top:-20%;left:0;width:100%;height:480px;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 8% 0%,rgba(27,117,188,.16),transparent 55%),radial-gradient(circle at 32% 10%,rgba(245,132,31,.10),transparent 50%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent);mask-image:linear-gradient(to bottom,#000 45%,transparent)}
+.shell{max-width:1480px;margin:0 auto;padding:22px 24px 40px;position:relative;z-index:1}
 
-  .kpi-strip {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 10px;
-    padding: 12px 28px;
-    overflow-x: auto;
-  }
-  .kpi-card {
-    flex: 1 1 0;
-    min-width: 100px;
-  }
-  .kpi-card {
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-left: 3px solid transparent;
-    border-radius: 10px;
-    padding: 12px;
-    cursor: pointer;
-    transition: border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
-  }
-  .kpi-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(27, 117, 188, 0.18);
-  }
-  .kpi-card.active {
-    border-color: var(--brand-blue-light);
-    border-left: 3px solid var(--flame-1);
-    box-shadow: 0 0 0 1px rgba(79, 163, 224, 0.25);
-  }
-  .kpi-card .label {
-    font-size: 11px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 600;
-  }
-  .kpi-card .value {
-    font-family: "Sora", "Inter", sans-serif;
-    font-size: 23px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    font-variant-numeric: tabular-nums;
-    margin-top: 5px;
-  }
-  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-  .dot.red { background: var(--red); }
-  .dot.orange { background: var(--orange); }
-  .dot.green { background: var(--green); }
+/* header */
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding:4px 0 14px}
+.brand{display:flex;align-items:center;gap:16px}
+.brand img{height:62px;width:auto;display:block;filter:drop-shadow(0 0 22px rgba(239,65,54,.35))}
+.brand-divider{width:1px;height:34px;background:var(--line)}
+.brand-text{display:flex;flex-direction:column;gap:2px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--f1)}
+h1{font-family:'Sora','Inter',sans-serif;font-size:30px;font-weight:800;letter-spacing:-.02em;color:#f7f9ff;text-shadow:0 2px 18px rgba(0,0,0,.5)}
+.head-side{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.head-row,.refresh-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.status{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid currentColor;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--good);background:rgba(61,220,151,.08)}
+.status.warn{color:var(--warn);background:rgba(255,180,84,.08)}
+.status.bad{color:var(--bad);background:rgba(255,84,112,.08)}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.5}100%{transform:scale(1);opacity:1}}
+.latest{background:var(--panel);border:1px solid rgba(79,163,224,.35);border-radius:999px;padding:6px 16px;font-size:13px;color:var(--muted)}
+.latest b{color:var(--text);font-weight:600}
+.btn{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:7px 14px;border-radius:8px;cursor:pointer;font:600 12px 'Inter',sans-serif;transition:border-color .15s,color .15s}
+.btn:hover{border-color:var(--f1);color:var(--f1)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.count{font-size:11px;color:var(--muted)}
+.brand-stripe{height:3px;border-radius:999px;background:linear-gradient(90deg,var(--blue) 0%,var(--f1) 55%,var(--f3) 100%);box-shadow:0 0 16px rgba(239,65,54,.35),0 0 16px rgba(27,117,188,.25)}
 
-  .controls {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 4px 28px 0;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .toggle {
-    display: flex;
-    border: 1px solid var(--panel-border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .toggle button {
-    background: var(--panel);
-    color: var(--text-dim);
-    border: none;
-    padding: 6px 16px;
-    font-size: 12px;
-    cursor: pointer;
-  }
-  .toggle button.active {
-    background: linear-gradient(90deg, var(--brand-blue-light), var(--flame-1));
-    color: #0a0d16;
-    font-weight: 600;
-  }
+/* KPI cards */
+.summary{display:flex;flex-wrap:nowrap;gap:10px;padding:18px 2px 12px;overflow-x:auto}
+.stat{flex:1 1 0;min-width:112px;background:var(--panel);border:1px solid var(--line);border-left:3px solid transparent;border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,transform .1s,box-shadow .15s}
+.stat:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,117,188,.18)}
+.stat.active{border-color:var(--blue-l);border-left:3px solid var(--f1);box-shadow:0 0 0 1px rgba(79,163,224,.25)}
+.k{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:'Sora','Inter',sans-serif;font-size:23px;font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums;margin-top:5px;white-space:nowrap}
+.sd{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle;position:relative;top:-2px}
+.sd.good{background:var(--good)} .sd.warn{background:var(--warn)} .sd.bad{background:var(--bad)}
 
-  .facts-strip {
-    padding: 12px 28px 0;
-    display: flex;
-    gap: 24px;
-    font-size: 12px;
-    color: var(--text-dim);
-  }
-  .facts-strip b { color: var(--text); }
+/* controls */
+.controls{display:flex;justify-content:flex-end;padding:2px 2px 0}
+.toggle{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.toggle button{background:var(--panel);color:var(--muted);border:none;padding:7px 18px;font:500 12px 'Inter',sans-serif;cursor:pointer}
+.toggle button.active{background:linear-gradient(90deg,var(--blue-l),var(--f1));color:#0a0d16;font-weight:700}
 
-  .panel {
-    margin: 14px 28px 28px;
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-radius: 12px;
-    padding: 18px;
-    min-height: 360px;
-    transition: border-color 0.2s ease;
-  }
-  .panel:hover {
-    border-color: rgba(79, 163, 224, 0.3);
-  }
+/* panels */
+.surface{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;transition:border-color .2s}
+.surface:hover{border-color:rgba(79,163,224,.3)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);gap:16px;margin-top:14px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--f1);margin-bottom:8px}
+.detail-title{font-family:'Sora','Inter',sans-serif;font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.detail-copy{color:var(--muted);margin-top:10px;max-width:640px}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.fact{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.fact .v{font-family:'Sora','Inter',sans-serif;font-size:22px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums}
+.content{margin-top:16px;position:relative;overflow:hidden;isolation:isolate}
+.content>*{position:relative;z-index:1}
+.content-title{font-family:'Sora','Inter',sans-serif;font-size:18px;font-weight:700;margin-bottom:16px}
 
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--panel-border); }
+/* flame glow behind charts */
+.content.chart-mode::before{content:"";position:absolute;inset:-10%;z-index:0;pointer-events:none;
+  background:radial-gradient(circle at 20% 85%,rgba(245,132,31,.24),transparent 42%),radial-gradient(circle at 55% 95%,rgba(239,65,54,.20),transparent 46%),radial-gradient(circle at 80% 88%,rgba(193,39,45,.16),transparent 40%);
+  filter:blur(30px);animation:ember 4.5s ease-in-out infinite alternate}
+@keyframes ember{0%{opacity:.55;transform:scale(1) translateY(0)}35%{opacity:.85;transform:scale(1.04) translateY(-6px)}65%{opacity:.65;transform:scale(.98) translateY(3px)}100%{opacity:.9;transform:scale(1.03) translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.content.chart-mode::before{animation:none;opacity:.7}.dot{animation:none}}
 
-  .chart-wrap {
-    position: relative;
-    height: 320px;
-  }
-  .chart-wrap canvas {
-    position: relative;
-    z-index: 1;
-  }
-  .chart-wrap::before {
-    content: "";
-    position: absolute;
-    inset: -10%;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 20% 85%, rgba(245, 132, 31, 0.24), transparent 42%),
-      radial-gradient(circle at 55% 95%, rgba(239, 65, 54, 0.20), transparent 46%),
-      radial-gradient(circle at 80% 88%, rgba(193, 39, 45, 0.16), transparent 40%);
-    filter: blur(30px);
-    animation: emberFlicker 4.5s ease-in-out infinite alternate;
-  }
-  @keyframes emberFlicker {
-    0%   { opacity: 0.55; transform: scale(1) translateY(0); }
-    35%  { opacity: 0.85; transform: scale(1.04) translateY(-6px); }
-    65%  { opacity: 0.65; transform: scale(0.98) translateY(3px); }
-    100% { opacity: 0.9;  transform: scale(1.03) translateY(-3px); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .chart-wrap::before { animation: none; opacity: 0.7; }
-  }
-  th { color: var(--text-dim); font-weight: 600; text-transform: uppercase; font-size: 11px; }
+/* table */
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;max-height:560px}
+table{width:100%;border-collapse:collapse;min-width:480px}
+th,td{padding:10px 14px;border-bottom:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums}
+th{position:sticky;top:0;background:#1a2133;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;z-index:2}
+tr:nth-child(even) td{background:rgba(255,255,255,.025)}
+th:first-child,td:first-child{position:sticky;left:0;z-index:1}
+th:first-child{background:#1a2133;z-index:3}
+td:first-child{background:var(--panel)}
+tr:nth-child(even) td:first-child{background:#151b2b}
 
-  .refresh-row {
-    padding: 0 28px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .refresh-row button {
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    color: var(--text);
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: border-color 0.15s ease, color 0.15s ease;
-  }
-  .refresh-row button:hover {
-    border-color: var(--flame-1);
-    color: var(--flame-1);
-  }
-  .refresh-row span { font-size: 11px; color: var(--text-dim); }
+/* charts */
+.chart-box{position:relative;border:1px solid var(--line);border-radius:12px;padding:16px;background:linear-gradient(180deg,rgba(79,163,224,.05),transparent)}
+.chart-svg{width:100%;height:auto;display:block}
+.chart-svg.donut{max-width:440px;margin:0 auto}
+.axis{stroke:rgba(255,255,255,.07);stroke-width:1}
+.axis-text{fill:var(--muted);font:11px 'Inter',sans-serif}
+.guide{stroke:rgba(255,255,255,.25);stroke-width:1;display:none}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.legend-item{display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);font-size:12px;color:#d6dcea}
+.sw{width:10px;height:10px;border-radius:999px;display:inline-block}
+.tip{position:absolute;display:none;pointer-events:none;z-index:5;background:#0e1322;border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:12px;box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap}
+.tip-h{font-weight:700;margin-bottom:4px}
+.tip-row{display:flex;align-items:center;gap:7px;color:#d6dcea;line-height:1.7}
+.tip-row b{margin-left:auto;padding-left:14px;color:var(--text);font-variant-numeric:tabular-nums}
+.empty{padding:28px 20px;text-align:center;color:var(--muted);font-size:12px}
+
+@media (max-width:980px){.workspace{grid-template-columns:1fr}.head-side{align-items:flex-start}.head-row,.refresh-row{justify-content:flex-start}}
+@media (max-width:720px){.shell{padding:16px 12px 34px}.surface{padding:16px}h1{font-size:22px}.brand img{height:44px}.detail-title{font-size:24px}}
 </style>
 </head>
 <body>
+<div class="shell">
+  <header>
+    <div class="brand">
+      <img src="logo.png" alt="Hydrofire logo">
+      <div class="brand-divider"></div>
+      <div class="brand-text">
+        <span class="eyebrow">Hydrofire Operations</span>
+        <h1>Cape Town Warehouse Dashboard</h1>
+      </div>
+    </div>
+    <div class="head-side">
+      <div class="head-row">
+        <div class="status" id="statusBadge"><span class="dot"></span><span id="statusText">Loading</span></div>
+        <div class="latest">Latest reading: <b id="generatedAt">&mdash;</b></div>
+      </div>
+      <div class="refresh-row">
+        <button class="btn" id="refreshBtn" onclick="manualRefresh()">Refresh Now</button>
+        <span class="count" id="countdown">Next check in 60s</span>
+      </div>
+    </div>
+  </header>
+  <div class="brand-stripe"></div>
 
-<header>
-  <div class="brand">
-    <img src="logo.png" alt="Hydrofire logo">
-    <div class="brand-divider"></div>
-    <div class="brand-text">
-      <span class="eyebrow">Hydrofire Operations</span>
-      <h1>Cape Town Warehouse Dashboard</h1>
+  <section class="summary" id="summaryGrid"></section>
+
+  <div class="controls">
+    <div class="toggle">
+      <button class="active" id="tableBtn" onclick="setView('table')">Table</button>
+      <button id="chartBtn" onclick="setView('chart')">Chart</button>
     </div>
   </div>
-  <div class="latest-reading">Latest reading: <b id="latestReading">—</b></div>
-</header>
-<div class="brand-stripe"></div>
 
-<div class="refresh-row">
-  <button id="refreshBtn">Refresh Now</button>
-  <span id="refreshStatus"></span>
-</div>
+  <section class="workspace">
+    <div class="surface">
+      <div class="section-label">KPI</div>
+      <div class="detail-title" id="datasetTitle">Loading...</div>
+      <p class="detail-copy" id="datasetDescription"></p>
+    </div>
+    <div class="fact-grid" id="factGrid"></div>
+  </section>
 
-<div class="kpi-strip" id="kpiStrip"></div>
-
-<div class="controls">
-  <div class="toggle">
-    <button id="tableToggle" class="active">Table</button>
-    <button id="chartToggle">Chart</button>
-  </div>
-</div>
-
-<div class="panel">
-  <div id="tableView"></div>
-  <div class="chart-wrap" id="chartWrap" style="display:none;">
-    <canvas id="chartView"></canvas>
-  </div>
+  <section class="surface content" id="contentSurface">
+    <div class="content-title" id="contentTitle">Table</div>
+    <div id="contentBody"></div>
+  </section>
 </div>
 
 <script>
 const KPI_DEFS = [
-  { key: "housekeeping", label: "Housekeeping", type: "housekeeping" },
-  { key: "container-jhb", label: "JHB Accuracy", type: "accuracy" },
-  { key: "container-george", label: "George Accuracy", type: "accuracy" },
-  { key: "urgent-orders", label: "Urgent Orders", type: "urgent" },
-  { key: "dispatch-accuracy", label: "Dispatch Accuracy", type: "accuracy" },
-  { key: "sku-share", label: "SKU Share", type: "donut" },
-  { key: "sku-monthly", label: "SKU 2026 YTD", type: "sku_monthly" },
-  { key: "assembly-backorders", label: "Assembly Fill Rate", type: "fill_rate" },
+  { key: 'housekeeping',        label: 'Housekeeping',       type: 'housekeeping' },
+  { key: 'container-jhb',       label: 'JHB Accuracy',       type: 'accuracy' },
+  { key: 'container-george',    label: 'George Accuracy',    type: 'accuracy' },
+  { key: 'urgent-orders',       label: 'Urgent Orders',      type: 'urgent' },
+  { key: 'dispatch-accuracy',   label: 'Dispatch Accuracy',  type: 'accuracy' },
+  { key: 'sku-share',           label: 'SKU Share',          type: 'donut' },
+  { key: 'sku-monthly',         label: 'SKU 2026 YTD',       type: 'sku_monthly' },
+  { key: 'assembly-backorders', label: 'Assembly Fill Rate', type: 'fill_rate' },
 ];
-
-// Each KPI gets its own accent color so charts read distinctly at a glance
-// instead of every line being the same generic blue.
 const KPI_COLORS = {
-  "housekeeping": "#4fa3e0",
-  "container-jhb": "#1b75bc",
-  "container-george": "#38bdf8",
-  "dispatch-accuracy": "#8b7cf6",
-  "urgent-orders": "#f5841f",
-  "assembly-backorders": "#3ddc97",
+  'housekeeping': '#4fa3e0', 'container-jhb': '#1b75bc', 'container-george': '#38bdf8',
+  'dispatch-accuracy': '#8b7cf6', 'urgent-orders': '#f5841f', 'assembly-backorders': '#3ddc97',
 };
+const PALETTE = ['#4fa3e0', '#3ddc97', '#ffb454', '#ff5470', '#a78bfa', '#f472b6', '#facc15', '#38bdf8'];
 
-Chart.defaults.font.family = "'Inter', sans-serif";
+let dashboard = null;
+let selectedKey = 'housekeeping';
+let viewMode = 'table';
+let refreshBusy = false, refreshTimer = null, countdownTimer = null, countdownValue = 60;
 
-function hexToRgba(hex, alpha) {
-  const h = hex.replace("#", "");
-  const full = h.length === 3 ? h.split("").map(c => c + c).join("") : h;
-  const num = parseInt(full, 16);
-  const r = (num >> 16) & 255, g = (num >> 8) & 255, b = num & 255;
-  return `rgba(${r},${g},${b},${alpha})`;
+/* ---------- helpers ---------- */
+function esc(v) {
+  return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
-
-let dashboardData = null;
-let activeKpi = "housekeeping";
-let activeView = "table";
-let chartInstance = null;
-
-function colorFor(type, value) {
-  if (value === null || value === undefined || value === "") return "";
-  if (type === "housekeeping") {
-    if (value < 0.50) return "red";
-    if (value < 0.80) return "orange";
-    return "green";
-  }
-  if (type === "accuracy") {
-    if (value <= 0.97) return "red";
-    if (value < 0.99) return "orange";
-    return "green";
-  }
-  if (type === "urgent") {
-    if (value <= 0.05) return "green";
-    if (value <= 0.10) return "orange";
-    return "red";
-  }
-  if (type === "fill_rate") {
-    if (value < 0.70) return "red";
-    if (value < 0.85) return "orange";
-    return "green";
-  }
-  return "";
+const isNum = v => typeof v === 'number' && isFinite(v);
+const pct1 = v => isNum(v) ? (v * 100).toFixed(1) + '%' : '-';
+const int = v => isNum(v) ? Number(v).toLocaleString('en-ZA', { maximumFractionDigits: 0 }) : '-';
+function fmt(value, format) {
+  if (value === null || value === undefined || value === '') return '-';
+  if (format === 'percent') return pct1(Number(value));
+  if (format === 'integer') return int(Number(value));
+  return esc(value);
 }
-
-function pct(v) {
-  if (v === null || v === undefined || v === "") return "—";
-  return (v * 100).toFixed(1) + "%";
-}
-
-async function loadData() {
-  document.getElementById("refreshStatus").textContent = "Loading…";
+function fmtDate(value) {
   try {
-    const res = await fetch("dashboard_data.json?_=" + Date.now());
-    dashboardData = await res.json();
-    document.getElementById("latestReading").textContent =
-      new Date(dashboardData.generatedAt).toLocaleString();
-    document.getElementById("refreshStatus").textContent = "";
-    renderAll();
-  } catch (e) {
-    document.getElementById("refreshStatus").textContent = "Failed to load dashboard_data.json";
-  }
+    return new Intl.DateTimeFormat('en-ZA', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Africa/Johannesburg' }).format(new Date(value));
+  } catch (e) { return value || 'Unknown'; }
+}
+function lastNum(a) { for (let i = a.length - 1; i >= 0; i--) if (isNum(a[i])) return a[i]; return null; }
+function maxNum(a) { const n = a.filter(isNum); return n.length ? Math.max(...n) : null; }
+function minNum(a) { const n = a.filter(isNum); return n.length ? Math.min(...n) : null; }
+
+function toneFor(type, v) {
+  if (!isNum(v)) return '';
+  if (type === 'housekeeping') return v < 0.50 ? 'bad' : v < 0.80 ? 'warn' : 'good';
+  if (type === 'accuracy')     return v <= 0.97 ? 'bad' : v < 0.99 ? 'warn' : 'good';
+  if (type === 'urgent')       return v <= 0.05 ? 'good' : v <= 0.10 ? 'warn' : 'bad';
+  if (type === 'fill_rate')    return v < 0.70 ? 'bad' : v < 0.85 ? 'warn' : 'good';
+  return '';
 }
 
-function latestValue(key, type) {
-  const kpi = dashboardData.kpis[key];
-  if (type === "housekeeping") {
-    const w = kpi.weekly;
-    return w && w.length ? w[w.length - 1].value_92m : null;
-  }
-  if (type === "donut") return null;
-  if (type === "sku_monthly") return null;
-  if (Array.isArray(kpi) && kpi.length) {
-    for (let i = kpi.length - 1; i >= 0; i--) {
-      const v = kpi[i].value ?? kpi[i].fill_rate;
-      if (v !== null && v !== undefined) return v;
-    }
-    return null;
-  }
-  return null;
-}
-
-function topShareName(kpi) {
-  if (!Array.isArray(kpi) || !kpi.length) return "—";
-  const top = kpi.reduce((a, b) => (b.share > a.share ? b : a));
-  return top.picker;
-}
-
-function latestCombinedSku(kpi) {
-  if (!Array.isArray(kpi)) return null;
-  for (let i = kpi.length - 1; i >= 0; i--) {
-    const r = kpi[i];
-    if (r.y2026_cpt !== null && r.y2026_cpt !== undefined || r.y2026_george !== null && r.y2026_george !== undefined) {
-      return (r.y2026_cpt || 0) + (r.y2026_george || 0);
-    }
-  }
-  return null;
-}
-
-function renderKpiStrip() {
-  const strip = document.getElementById("kpiStrip");
-  strip.innerHTML = "";
-  KPI_DEFS.forEach(def => {
-    let color = "", displayValue;
-    if (def.type === "donut") {
-      displayValue = topShareName(dashboardData.kpis[def.key]);
-    } else if (def.type === "sku_monthly") {
-      const combined = latestCombinedSku(dashboardData.kpis[def.key]);
-      displayValue = combined !== null ? combined.toLocaleString() : "—";
-    } else {
-      const val = latestValue(def.key, def.type);
-      color = colorFor(def.type, val);
-      displayValue = val !== null ? pct(val) : "—";
-    }
-    const card = document.createElement("div");
-    card.className = "kpi-card" + (def.key === activeKpi ? " active" : "");
-    card.onclick = () => { activeKpi = def.key; render(); };
-    card.innerHTML = `
-      <div class="label">${def.label}</div>
-      <div class="value">${color ? `<span class="dot ${color}"></span>` : ""}${displayValue}</div>
-    `;
-    strip.appendChild(card);
-  });
-}
-
-function renderFacts() {
-  const def = KPI_DEFS.find(d => d.key === activeKpi);
-  const kpi = dashboardData.kpis[activeKpi];
-  const facts = document.getElementById("factsStrip");
-  let count = Array.isArray(kpi) ? kpi.length : (kpi.weekly ? kpi.weekly.length : 0);
-  facts.innerHTML = `<span><b>${count}</b> data points</span>
-    <span>Source: <b>Operations Data.xlsx</b></span>
-    <span>Generated: <b>${new Date(dashboardData.generatedAt).toLocaleString()}</b></span>`;
-}
-
-function renderTable() {
-  const def = KPI_DEFS.find(d => d.key === activeKpi);
-  const kpi = dashboardData.kpis[activeKpi];
-  const container = document.getElementById("tableView");
-  let rows = [];
-
-  if (def.type === "housekeeping") {
-    rows = kpi.weekly.map(r => [r.week, pct(r.value_92m), pct(r.value_12m)]);
-    container.innerHTML = tableHtml(["Week", "92M", "12M"], rows);
-  } else if (def.type === "donut") {
-    rows = kpi.map(r => [r.picker, r.count, pct(r.share)]);
-    container.innerHTML = tableHtml(["Picker", "Count", "Share"], rows);
-  } else if (def.type === "sku_monthly") {
-    rows = kpi.map(r => [r.month, r.y2024, r.y2025, r.y2026_cpt, r.y2026_george ?? "—"]);
-    container.innerHTML = tableHtml(["Month", "2024", "2025", "2026 CPT", "2026 George"], rows);
-  } else if (def.type === "fill_rate") {
-    rows = kpi.map(r => [r.month, r.assembled, r.backorders, pct(r.fill_rate)]);
-    container.innerHTML = tableHtml(["Month", "Assembled", "Backorders", "Fill Rate"], rows);
-  } else {
-    rows = kpi.map(r => [r.label, pct(r.value)]);
-    container.innerHTML = tableHtml(["Period", "Value"], rows);
-  }
-}
-
-function tableHtml(headers, rows) {
-  return `<table>
-    <thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>
-    <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
-  </table>`;
-}
-
-function renderChart() {
-  const def = KPI_DEFS.find(d => d.key === activeKpi);
-  const kpi = dashboardData.kpis[activeKpi];
-  const ctx = document.getElementById("chartView").getContext("2d");
-  if (chartInstance) chartInstance.destroy();
-
-  if (def.type === "donut") {
-    chartInstance = new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels: kpi.map(r => r.picker),
-        datasets: [{ data: kpi.map(r => r.share), backgroundColor: paletteFor(kpi.length) }],
-      },
-      options: { maintainAspectRatio: false, plugins: { legend: { labels: { color: "#f2f4f8", usePointStyle: true, pointStyle: "circle", padding: 14 } } }, radius: "70%" },
-    });
-    return;
-  }
-
-  if (def.type === "sku_monthly") {
-    const labels = kpi.map(r => r.month);
-    const series2026 = kpi.map(r => r.y2026_cpt);
-    const series2025 = kpi.map(r => r.y2025);
-    const series2024 = kpi.map(r => r.y2024);
-    const seriesGeorge = kpi.map(r => r.y2026_george);
-    const seriesCombined = kpi.map(r =>
-      (r.y2026_cpt == null && r.y2026_george == null) ? null : (r.y2026_cpt || 0) + (r.y2026_george || 0)
-    );
-    const allValues = [...series2026, ...series2025, ...series2024, ...seriesGeorge, ...seriesCombined].filter(v => v !== null && v !== undefined);
-    const mn = Math.min(...allValues);
-    const mx = Math.max(...allValues);
-    const pad2 = (mx - mn) * 0.15 || 0.05;
-
-    const cptGradient = ctx.createLinearGradient(0, 0, 0, 320);
-    cptGradient.addColorStop(0, "rgba(79,163,224,0.30)");
-    cptGradient.addColorStop(1, "rgba(79,163,224,0.02)");
-
-    chartInstance = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels,
-        datasets: [
-          { label: "2026 CPT", data: series2026, borderColor: "#4fa3e0", backgroundColor: cptGradient, borderWidth: 2.5, pointRadius: 3, pointBackgroundColor: "#4fa3e0", pointBorderColor: "#0a0d16", pointBorderWidth: 1, fill: true, tension: 0.3 },
-          { label: "2026 George", data: seriesGeorge, borderColor: "#f472b6", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.3 },
-          { label: "2026 Combined", data: seriesCombined, borderColor: "#ffffff", borderWidth: 2, pointRadius: 2, fill: false, tension: 0.3 },
-          { label: "2025", data: series2025, borderColor: "#3ddc97", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.3 },
-          { label: "2024", data: series2024, borderColor: "#ffb454", borderDash: [4, 3], borderWidth: 1.5, pointRadius: 2, fill: false, tension: 0.3 },
-        ],
-      },
-      options: {
-        maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: "#f2f4f8", usePointStyle: true, pointStyle: "circle", padding: 16 } } },
-        scales: {
-          x: { ticks: { color: "#9aa4b8" }, grid: { color: "#232a3d" } },
-          y: { min: 0, max: mx + pad2, ticks: { color: "#9aa4b8" }, grid: { color: "#232a3d" } },
-        },
-      },
-    });
-    return;
-  }
-
-  let labels, values, targetValue;
-  if (def.type === "housekeeping") {
-    labels = kpi.weekly.map(r => r.week);
-    values = kpi.weekly.map(r => r.value_92m);
-    targetValue = 0.80;
-  } else if (def.type === "fill_rate") {
-    labels = kpi.map(r => r.month);
-    values = kpi.map(r => r.fill_rate);
-    targetValue = 0.85;
-  } else {
-    labels = kpi.map(r => r.label);
-    values = kpi.map(r => r.value);
-    targetValue = def.type === "accuracy" ? 1.0 : null;
-  }
-
-  const numeric = values.filter(v => v !== null && v !== undefined);
-  const min = Math.min(...numeric);
-  const max = Math.max(...numeric);
-  const pad = (max - min) * 0.15 || 0.05;
-
-  // These 5 KPIs are percentages, so lock the axis to 0-100% in steps of 10
-  const fixedRangeKpis = ["housekeeping", "container-jhb", "container-george", "dispatch-accuracy", "assembly-backorders"];
-  const useFixedRange = fixedRangeKpis.includes(activeKpi);
-
-  // Urgent Orders: 0% up to the highest value in the data, in steps of 10%
-  const isUrgent = activeKpi === "urgent-orders";
-  const urgentMax = isUrgent ? Math.max(0.1, Math.ceil(Math.max(...numeric, 0) * 10) / 10) : null;
-
-  // These KPIs asked to hide their raw-value line from the legend (Trend/Target stay visible)
-  const hideMainLegend = ["housekeeping", "container-jhb", "container-george", "dispatch-accuracy", "urgent-orders"].includes(activeKpi);
-
-  const accentColor = KPI_COLORS[activeKpi] || "#4fa3e0";
-  const gradient = ctx.createLinearGradient(0, 0, 0, 320);
-  gradient.addColorStop(0, hexToRgba(accentColor, 0.35));
-  gradient.addColorStop(1, hexToRgba(accentColor, 0.02));
-
-  const datasets = [{
-    label: def.label,
-    data: values,
-    borderColor: accentColor,
-    backgroundColor: gradient,
-    borderWidth: 0,
-    pointRadius: 0,
-    fill: true,
-    tension: 0.3,
-  }];
-
-  // Trend line: solid, colored to match this KPI's accent
-  datasets.push({
-    label: "Trend",
-    data: values,
-    borderColor: accentColor,
-    borderWidth: 2.5,
-    pointRadius: 3,
-    pointBackgroundColor: accentColor,
-    pointBorderColor: "#0a0d16",
-    pointBorderWidth: 1,
-    fill: false,
-    tension: 0.3,
-  });
-
-  // Target line: neutral so it always reads distinctly from the trend color
-  if (targetValue !== null) {
-    datasets.push({
-      label: "Target",
-      data: labels.map(() => targetValue),
-      borderColor: "#e8ecf5",
-      borderDash: [6, 4],
-      borderWidth: 1.5,
-      pointRadius: 0,
-      fill: false,
-    });
-  }
-
-  chartInstance = new Chart(ctx, {
-    type: "line",
-    data: { labels, datasets },
-    options: {
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: "#f2f4f8",
-            usePointStyle: true,
-            pointStyle: "circle",
-            padding: 16,
-            filter: (item) => !(hideMainLegend && item.text === def.label),
-          },
-        },
-      },
-      scales: {
-        x: { ticks: { color: "#9aa4b8" }, grid: { color: "#232a3d" } },
-        y: useFixedRange ? {
-          min: 0,
-          max: 1,
-          ticks: {
-            stepSize: 0.1,
-            color: "#9aa4b8",
-            callback: (v) => Math.round(v * 100) + "%",
-          },
-          grid: { color: "#232a3d" },
-        } : isUrgent ? {
-          min: 0,
-          max: urgentMax,
-          ticks: {
-            stepSize: 0.1,
-            color: "#9aa4b8",
-            callback: (v) => Math.round(v * 100) + "%",
-          },
-          grid: { color: "#232a3d" },
-        } : {
-          min: min - pad,
-          max: max + pad,
-          ticks: { color: "#9aa4b8" },
-          grid: { color: "#232a3d" },
-        },
-      },
-    },
-  });
-}
-
-function paletteFor(n) {
-  const base = ["#4fa3e0", "#3ddc97", "#ffb454", "#ff5470", "#a78bfa", "#f472b6", "#facc15", "#38bdf8"];
-  const out = [];
-  for (let i = 0; i < n; i++) out.push(base[i % base.length]);
+function percentFacts(values, target) {
+  const out = [{ label: 'Latest', value: pct1(lastNum(values)) }];
+  if (target !== null && target !== undefined) out.push({ label: 'Target', value: pct1(target) });
+  out.push({ label: 'Highest', value: pct1(maxNum(values)) }, { label: 'Lowest', value: pct1(minNum(values)) });
   return out;
 }
 
-function render() {
-  renderKpiStrip();
-  // facts strip removed from dashboard
-  if (activeView === "table") {
-    document.getElementById("tableView").style.display = "block";
-    document.getElementById("chartWrap").style.display = "none";
-    renderTable();
-  } else {
-    document.getElementById("tableView").style.display = "none";
-    document.getElementById("chartWrap").style.display = "block";
-    renderChart();
+/* Build a line-chart spec for a percentage KPI: fixed 0-100% axis in 10% steps unless a max is given */
+function percentChart(labels, values, color, target, yMax) {
+  const series = [{ name: 'Trend', values, color, area: true, strokeWidth: 3, format: 'percent' }];
+  if (target !== null && target !== undefined) {
+    series.push({ name: 'Target', values: labels.map(() => target), color: '#e8ecf5', style: 'dashed', showDots: false, strokeWidth: 1.5, format: 'percent' });
   }
+  return { kind: 'line', labels, series, format: 'percent', yMin: 0, yMax: yMax || 1, yStep: 0.1 };
 }
 
-function renderAll() { render(); }
+function niceAxis(maxValue) {
+  const raw = Math.max(maxValue, 1) / 5;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / mag;
+  const step = (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * mag;
+  return { step, max: Math.ceil(maxValue / step) * step };
+}
 
-document.getElementById("tableToggle").onclick = () => {
-  activeView = "table";
-  document.getElementById("tableToggle").classList.add("active");
-  document.getElementById("chartToggle").classList.remove("active");
-  render();
-};
-document.getElementById("chartToggle").onclick = () => {
-  activeView = "chart";
-  document.getElementById("chartToggle").classList.add("active");
-  document.getElementById("tableToggle").classList.remove("active");
-  render();
-};
-document.getElementById("refreshBtn").onclick = loadData;
+/* ---------- adapt the V2 dashboard_data.json into display datasets ---------- */
+function buildDataset(def, kpi) {
+  const color = KPI_COLORS[def.key] || '#4fa3e0';
+  const ds = { key: def.key, label: def.label, type: def.type };
 
-// Poll every 60 seconds, same as the original dashboard
-loadData();
-setInterval(loadData, 60000);
+  if (def.type === 'housekeeping') {
+    const weekly = kpi && Array.isArray(kpi.weekly) ? kpi.weekly : [];
+    const values = weekly.map(r => r.value_92m);
+    const latest = lastNum(values);
+    ds.card = { value: pct1(latest), tone: toneFor('housekeeping', latest) };
+    ds.description = 'Target 80%. Green at 80% or above, orange from 50%, red below 50%.';
+    ds.facts = percentFacts(values, 0.80);
+    ds.table = { columns: [{ key: 'week', label: 'Week' }, { key: 'v92', label: '92M', format: 'percent' }, { key: 'v12', label: '12M', format: 'percent' }],
+                 rows: weekly.map(r => ({ week: r.week, v92: r.value_92m, v12: r.value_12m })) };
+    ds.chart = percentChart(weekly.map(r => r.week), values, color, 0.80);
+  } else if (def.type === 'accuracy') {
+    const arr = Array.isArray(kpi) ? kpi : [];
+    const values = arr.map(r => r.value);
+    const latest = lastNum(values);
+    ds.card = { value: pct1(latest), tone: toneFor('accuracy', latest) };
+    ds.description = 'Target 100%. Green at 99% or above, orange between 97% and 99%, red at 97% or below.';
+    ds.facts = percentFacts(values, 1.0);
+    ds.table = { columns: [{ key: 'label', label: 'Period' }, { key: 'value', label: 'Value', format: 'percent' }], rows: arr };
+    ds.chart = percentChart(arr.map(r => r.label), values, color, 1.0);
+  } else if (def.type === 'urgent') {
+    const arr = Array.isArray(kpi) ? kpi : [];
+    const values = arr.map(r => r.value);
+    const latest = lastNum(values);
+    const top = Math.max(0.1, Math.ceil((maxNum(values) || 0) * 10 - 1e-9) / 10);
+    ds.card = { value: pct1(latest), tone: toneFor('urgent', latest) };
+    ds.description = 'Lower is better. Green up to 5%, orange up to 10%, red above 10%.';
+    ds.facts = percentFacts(values, null);
+    ds.table = { columns: [{ key: 'label', label: 'Period' }, { key: 'value', label: 'Value', format: 'percent' }], rows: arr };
+    ds.chart = percentChart(arr.map(r => r.label), values, color, null, top);
+  } else if (def.type === 'fill_rate') {
+    const arr = Array.isArray(kpi) ? kpi : [];
+    const values = arr.map(r => r.fill_rate);
+    const latest = lastNum(values);
+    ds.card = { value: pct1(latest), tone: toneFor('fill_rate', latest) };
+    ds.description = 'Target 85%. Green at 85% or above, orange from 70%, red below 70%.';
+    ds.facts = percentFacts(values, 0.85);
+    ds.table = { columns: [{ key: 'month', label: 'Month' }, { key: 'assembled', label: 'Assembled', format: 'integer' }, { key: 'backorders', label: 'Backorders', format: 'integer' }, { key: 'fill_rate', label: 'Fill Rate', format: 'percent' }], rows: arr };
+    ds.chart = percentChart(arr.map(r => r.month), values, color, 0.85);
+  } else if (def.type === 'donut') {
+    const arr = Array.isArray(kpi) ? kpi : [];
+    const top = arr.length ? arr.reduce((a, b) => (b.share > a.share ? b : a)) : null;
+    const total = arr.reduce((s, r) => s + (Number(r.count) || 0), 0);
+    ds.card = { value: top ? top.picker : '-', tone: '' };
+    ds.description = 'Share of the total picked by each picker.';
+    ds.facts = [{ label: 'Top picker', value: top ? top.picker : '-' }, { label: 'Top share', value: top ? pct1(top.share) : '-' }, { label: 'Total picked', value: int(total) }];
+    ds.table = { columns: [{ key: 'picker', label: 'Picker' }, { key: 'count', label: 'Count', format: 'integer' }, { key: 'share', label: 'Share', format: 'percent' }], rows: arr };
+    ds.chart = { kind: 'donut', series: arr.map((r, i) => ({ name: r.picker, value: r.count, share: r.share, color: PALETTE[i % PALETTE.length] })) };
+  } else if (def.type === 'sku_monthly') {
+    const arr = Array.isArray(kpi) ? kpi : [];
+    const combined = arr.map(r => (!isNum(r.y2026_cpt) && !isNum(r.y2026_george)) ? null : (r.y2026_cpt || 0) + (r.y2026_george || 0));
+    const latest = lastNum(combined);
+    const peakVal = maxNum(combined);
+    const peakIdx = combined.indexOf(peakVal);
+    const ytd = combined.filter(isNum).reduce((s, v) => s + v, 0);
+    ds.card = { value: latest === null ? '-' : int(latest), tone: '' };
+    ds.description = 'Monthly SKUs picked: 2026 CPT and George, with their combined total, against 2025 and 2024.';
+    ds.facts = [{ label: 'Latest combined', value: int(latest) }, { label: 'Peak month', value: peakIdx >= 0 ? arr[peakIdx].month : '-' }, { label: '2026 total', value: int(ytd) }];
+    ds.table = { columns: [{ key: 'month', label: 'Month' }, { key: 'y2024', label: '2024', format: 'integer' }, { key: 'y2025', label: '2025', format: 'integer' }, { key: 'y2026_cpt', label: '2026 CPT', format: 'integer' }, { key: 'y2026_george', label: '2026 George', format: 'integer' }], rows: arr };
+    const all = [...arr.map(r => r.y2024), ...arr.map(r => r.y2025), ...combined];
+    const axis = niceAxis(maxNum(all) || 1);
+    ds.chart = { kind: 'line', labels: arr.map(r => r.month), format: 'integer', yMin: 0, yMax: axis.max, yStep: axis.step, series: [
+      { name: '2026 CPT',      values: arr.map(r => r.y2026_cpt),    color: '#4fa3e0', area: true, strokeWidth: 3, format: 'integer' },
+      { name: '2026 George',   values: arr.map(r => r.y2026_george), color: '#f472b6', style: 'dashed', strokeWidth: 2, format: 'integer' },
+      { name: '2026 Combined', values: combined,                     color: '#ffffff', strokeWidth: 3, format: 'integer' },
+      { name: '2025',          values: arr.map(r => r.y2025),        color: '#3ddc97', style: 'dashed', strokeWidth: 2, format: 'integer' },
+      { name: '2024',          values: arr.map(r => r.y2024),        color: '#ffb454', style: 'dashed', strokeWidth: 2, format: 'integer' },
+    ] };
+  }
+  return ds;
+}
+
+function adapt(raw) {
+  const k = (raw && raw.kpis) || {};
+  return { generatedAt: raw && raw.generatedAt, datasets: KPI_DEFS.map(def => buildDataset(def, k[def.key])) };
+}
+
+/* ---------- view state ---------- */
+function getDataset() { return dashboard && dashboard.datasets.find(d => d.key === selectedKey); }
+
+function setStatus(kind, label) {
+  document.getElementById('statusBadge').className = 'status' + (kind ? ' ' + kind : '');
+  document.getElementById('statusText').textContent = label;
+}
+function updateCountdown() {
+  document.getElementById('countdown').textContent = refreshBusy ? 'Checking now...' : `Next check in ${countdownValue}s`;
+}
+function restartAutoRefresh() {
+  countdownValue = 60;
+  updateCountdown();
+  if (countdownTimer) clearInterval(countdownTimer);
+  if (refreshTimer) clearInterval(refreshTimer);
+  countdownTimer = setInterval(() => { countdownValue = Math.max(0, countdownValue - 1); updateCountdown(); }, 1000);
+  refreshTimer = setInterval(() => refreshData(false), 60000);
+}
+function setRefreshBusy(busy) {
+  refreshBusy = busy;
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled = busy;
+  btn.textContent = busy ? 'Refreshing...' : 'Refresh Now';
+  updateCountdown();
+}
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('tableBtn').classList.toggle('active', mode === 'table');
+  document.getElementById('chartBtn').classList.toggle('active', mode === 'chart');
+  document.getElementById('contentSurface').classList.toggle('chart-mode', mode === 'chart');
+  renderContent();
+}
+function setDataset(key) {
+  selectedKey = key;
+  renderSummary();
+  renderDetail();
+  renderContent();
+}
+
+/* ---------- renderers ---------- */
+function renderSummary() {
+  document.getElementById('summaryGrid').innerHTML = dashboard.datasets.map(d => `
+    <article class="stat ${d.key === selectedKey ? 'active' : ''}" role="button" tabindex="0"
+             onclick="setDataset('${esc(d.key)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setDataset('${esc(d.key)}')}">
+      <div class="k">${esc(d.label)}</div>
+      <div class="v">${d.card.tone ? `<span class="sd ${d.card.tone}"></span>` : ''}${esc(d.card.value)}</div>
+    </article>`).join('');
+}
+
+function renderDetail() {
+  const d = getDataset();
+  if (!d) return;
+  document.getElementById('datasetTitle').textContent = d.label;
+  document.getElementById('datasetDescription').textContent = d.description || '';
+  document.getElementById('factGrid').innerHTML = (d.facts || []).map(f => `
+    <article class="fact"><div class="k">${esc(f.label)}</div><div class="v">${esc(f.value)}</div></article>`).join('');
+}
+
+function renderTable(d) {
+  const cols = d.table.columns, rows = d.table.rows;
+  if (!rows.length) return '<div class="empty">No table data available yet.</div>';
+  const head = cols.map(c => `<th>${esc(c.label)}</th>`).join('');
+  const body = rows.map(r => `<tr>${cols.map(c => `<td>${fmt(r[c.key], c.format)}</td>`).join('')}</tr>`).join('');
+  return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const rd = n => Math.round(n * 10) / 10;
+
+function smoothD(pts, top, bottom) {
+  let d = `M${rd(pts[0][0])},${rd(pts[0][1])}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    const c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = clamp(p1[1] + (p2[1] - p0[1]) / 6, top, bottom);
+    const c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = clamp(p2[1] - (p3[1] - p1[1]) / 6, top, bottom);
+    d += ` C${rd(c1x)},${rd(c1y)} ${rd(c2x)},${rd(c2y)} ${rd(p2[0])},${rd(p2[1])}`;
+  }
+  return d;
+}
+
+let chartMeta = null;
+
+function renderLineChart(chart) {
+  const labels = chart.labels || [], series = chart.series || [];
+  if (!labels.length || !series.length) return '<div class="empty">No chart data available yet.</div>';
+  const W = 1100, H = 420, m = { top: 26, right: 26, bottom: 58, left: 64 };
+  const pw = W - m.left - m.right, ph = H - m.top - m.bottom, base = m.top + ph;
+  const { yMin, yMax, yStep } = chart;
+  const n = labels.length;
+  const xPos = i => n === 1 ? m.left + pw / 2 : m.left + pw * i / (n - 1);
+  const yPos = v => m.top + ph - ph * ((v - yMin) / (yMax - yMin));
+  const axisFmt = v => chart.format === 'percent' ? Math.round(v * 100) + '%' : int(v);
+
+  const tickCount = Math.round((yMax - yMin) / yStep);
+  let grid = '';
+  for (let i = 0; i <= tickCount; i++) {
+    const v = Number((yMin + i * yStep).toFixed(6)), y = yPos(v);
+    grid += `<line class="axis" x1="${m.left}" y1="${y}" x2="${W - m.right}" y2="${y}"></line>
+             <text class="axis-text" x="${m.left - 12}" y="${y + 4}" text-anchor="end">${axisFmt(v)}</text>`;
+  }
+  const every = n > 24 ? 2 : 1;
+  const xLabels = labels.map((l, i) => i % every ? '' : `<text class="axis-text" x="${xPos(i)}" y="${H - 24}" text-anchor="middle">${esc(l)}</text>`).join('');
+
+  let defs = '', body = '';
+  series.forEach((s, idx) => {
+    const segs = []; let cur = [];
+    s.values.forEach((v, i) => {
+      if (!isNum(v)) { if (cur.length) segs.push(cur); cur = []; return; }
+      cur.push([xPos(i), yPos(v)]);
+    });
+    if (cur.length) segs.push(cur);
+    if (s.area) defs += `<linearGradient id="ga${idx}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.color}" stop-opacity=".35"></stop><stop offset="1" stop-color="${s.color}" stop-opacity=".02"></stop></linearGradient>`;
+    const dash = s.style === 'dashed' ? '8 6' : '';
+    segs.forEach(pts => {
+      const line = pts.length > 1 ? (s.style === 'dashed' && s.showDots === false ? 'M' + pts.map(p => `${rd(p[0])},${rd(p[1])}`).join(' L') : smoothD(pts, m.top, base)) : '';
+      if (s.area && pts.length > 1) body += `<path d="${line} L${rd(pts[pts.length - 1][0])},${base} L${rd(pts[0][0])},${base} Z" fill="url(#ga${idx})"></path>`;
+      if (line) body += `<path d="${line}" fill="none" stroke="${s.color}" stroke-width="${s.strokeWidth || 3}" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${dash}"></path>`;
+    });
+    if (s.showDots !== false) {
+      const r = n > 24 ? 3 : 3.8;
+      s.values.forEach((v, i) => { if (isNum(v)) body += `<circle cx="${rd(xPos(i))}" cy="${rd(yPos(v))}" r="${r}" fill="${s.color}" stroke="#0a0d16" stroke-width="1.5"></circle>`; });
+    }
+  });
+
+  const legend = series.map(s => `<div class="legend-item"><span class="sw" style="background:${s.color}"></span>${esc(s.name)}</div>`).join('');
+  chartMeta = { width: W, labels, series, xs: labels.map((_, i) => xPos(i)), guideTop: m.top, guideBottom: base };
+  return `<div class="chart-box"><svg class="chart-svg" viewBox="0 0 ${W} ${H}"><defs>${defs}</defs>${grid}
+    <line class="axis" x1="${m.left}" y1="${base}" x2="${W - m.right}" y2="${base}"></line>
+    ${body}${xLabels}<line class="guide" x1="0" y1="${m.top}" x2="0" y2="${base}"></line></svg>
+    <div class="tip"></div><div class="legend">${legend}</div></div>`;
+}
+
+function arcPath(cx, cy, r, a0, a1) {
+  const pt = a => { const rad = (a - 90) * Math.PI / 180; return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) }; };
+  const s = pt(a1), e = pt(a0);
+  return `M ${s.x} ${s.y} A ${r} ${r} 0 ${a1 - a0 <= 180 ? 0 : 1} 0 ${e.x} ${e.y}`;
+}
+
+function renderDonutChart(chart) {
+  const series = chart.series || [];
+  if (!series.length) return '<div class="empty">No chart data available yet.</div>';
+  const total = series.reduce((s, i) => s + (Number(i.value) || 0), 0) || 1;
+  let angle = 0; const cx = 240, cy = 210, r = 118;
+  const paths = series.map(i => {
+    const slice = (Number(i.value) || 0) / total * 360;
+    const p = `<path d="${arcPath(cx, cy, r, angle, angle + slice)}" fill="none" stroke="${i.color}" stroke-width="42"></path>`;
+    angle += slice; return p;
+  }).join('');
+  const legend = series.map(i => `<div class="legend-item"><span class="sw" style="background:${i.color}"></span>${esc(i.name)} <strong>${int(i.value)}</strong> <span style="color:var(--muted)">(${pct1(i.share)})</span></div>`).join('');
+  return `<div class="chart-box"><svg class="chart-svg donut" viewBox="0 0 480 420">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="42"></circle>
+    ${paths}
+    <circle cx="${cx}" cy="${cy}" r="76" fill="#0f1424"></circle>
+    <text x="${cx}" y="${cy - 8}" text-anchor="middle" fill="#9aa4b8" font-family="Inter, sans-serif" font-size="11" letter-spacing="1.5">TOTAL PICKED</text>
+    <text x="${cx}" y="${cy + 28}" text-anchor="middle" fill="#fff" font-family="Sora, Inter, sans-serif" font-weight="800" font-size="32">${int(total)}</text>
+  </svg><div class="legend" style="justify-content:center">${legend}</div></div>`;
+}
+
+function bindTooltip() {
+  const box = document.querySelector('#contentBody .chart-box');
+  if (!box || !chartMeta || !box.querySelector('.guide')) return;
+  const meta = chartMeta, svg = box.querySelector('svg'), tip = box.querySelector('.tip'), guide = box.querySelector('.guide');
+  svg.addEventListener('mousemove', e => {
+    const r = svg.getBoundingClientRect(), br = box.getBoundingClientRect();
+    const x = (e.clientX - r.left) * (meta.width / r.width);
+    let best = 0, bd = Infinity;
+    meta.xs.forEach((px, i) => { const d = Math.abs(px - x); if (d < bd) { bd = d; best = i; } });
+    guide.setAttribute('x1', meta.xs[best]); guide.setAttribute('x2', meta.xs[best]); guide.style.display = 'block';
+    const rows = meta.series.filter(s => isNum(s.values[best])).map(s =>
+      `<div class="tip-row"><span class="sw" style="background:${s.color}"></span>${esc(s.name)}<b>${fmt(s.values[best], s.format)}</b></div>`).join('');
+    tip.innerHTML = `<div class="tip-h">${esc(meta.labels[best])}</div>${rows}`;
+    tip.style.display = 'block';
+    let left = meta.xs[best] * r.width / meta.width + (r.left - br.left) + 14;
+    if (left + tip.offsetWidth > box.clientWidth - 6) left -= tip.offsetWidth + 28;
+    tip.style.left = Math.max(6, left) + 'px';
+    tip.style.top = (r.top - br.top + 16) + 'px';
+  });
+  svg.addEventListener('mouseleave', () => { tip.style.display = 'none'; guide.style.display = 'none'; });
+}
+
+function renderContent() {
+  const d = getDataset();
+  const body = document.getElementById('contentBody');
+  if (!d) { body.innerHTML = '<div class="empty">No data available yet.</div>'; return; }
+  document.getElementById('contentTitle').textContent = `${d.label} ${viewMode === 'table' ? 'Table' : 'Chart'}`;
+  if (viewMode === 'table') { body.innerHTML = renderTable(d); return; }
+  body.innerHTML = d.chart.kind === 'donut' ? renderDonutChart(d.chart) : renderLineChart(d.chart);
+  bindTooltip();
+}
+
+/* ---------- data loading ---------- */
+async function refreshData(isManual) {
+  setRefreshBusy(true);
+  if (isManual) setStatus('', 'Refreshing');
+  try {
+    const res = await fetch(`dashboard_data.json?ts=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    dashboard = adapt(await res.json());
+    document.getElementById('generatedAt').textContent = fmtDate(dashboard.generatedAt);
+    const age = Date.now() - new Date(dashboard.generatedAt).getTime();
+    if (age > 15 * 60 * 1000) setStatus('warn', 'Stale'); else setStatus('', 'Live');
+    renderSummary();
+    renderDetail();
+    renderContent();
+    restartAutoRefresh();
+  } catch (err) {
+    console.error(err);
+    setStatus('bad', 'Unavailable');
+    document.getElementById('contentBody').innerHTML = `<div class="empty">Could not load dashboard data. ${esc(err.message || err)}</div>`;
+  } finally {
+    setRefreshBusy(false);
+  }
+}
+function manualRefresh() { refreshData(true); }
+
+refreshData(false);
 </script>
-
 </body>
 </html>
