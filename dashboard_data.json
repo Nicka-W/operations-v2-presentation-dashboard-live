@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-04T12:12:12.135847+00:00",
-  "sourceModifiedAt": "2026-11-04T12:08:46+00:00",
+  "generatedAt": "2026-11-04T12:13:53.137889+00:00",
+  "sourceModifiedAt": "2026-11-04T12:10:48+00:00",
   "kpis": {
     "housekeeping": {
       "average": 0.77,
@@ -819,15 +819,15 @@
         "month": "Oct",
         "y2024": 3941,
         "y2025": 5293,
-        "y2026_cpt": 4008,
-        "y2026_george": 643
+        "y2026_cpt": 4390,
+        "y2026_george": 788
       },
       {
         "month": "Nov",
         "y2024": 2973,
         "y2025": 4152,
         "y2026_cpt": null,
-        "y2026_george": null
+        "y2026_george": 115
       },
       {
         "month": "Dec",
