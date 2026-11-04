@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T12:09:47.394386+00:00",
+  "generatedAt": "2026-11-04T12:10:47.860917+00:00",
   "sourceModifiedAt": "2026-11-04T12:02:27+00:00",
   "kpis": {
     "housekeeping": {
@@ -718,6 +718,10 @@
       {
         "label": 44,
         "value": 1
+      },
+      {
+        "label": 45,
+        "value": 0.992
       }
     ],
     "sku-share": [
