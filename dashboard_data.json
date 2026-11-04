@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T12:14:52.512076+00:00",
+  "generatedAt": "2026-11-04T12:16:02.901207+00:00",
   "sourceModifiedAt": "2026-11-04T12:10:48+00:00",
   "kpis": {
     "housekeeping": {
@@ -727,28 +727,28 @@
     "sku-share": [
       {
         "picker": "Ali",
-        "count": 101,
-        "share": 0.04183927091963546
+        "count": 0,
+        "share": 0
       },
       {
         "picker": "Angelo",
         "count": 20,
-        "share": 0.008285004142502071
+        "share": 0.06153846153846154
       },
       {
         "picker": "Charlie",
         "count": 72,
-        "share": 0.029826014913007456
+        "share": 0.22153846153846155
       },
       {
         "picker": "Bongani",
-        "count": 482,
-        "share": 0.1996685998342999
+        "count": 78,
+        "share": 0.24
       },
       {
         "picker": "Endwell",
-        "count": 1739,
-        "share": 0.7203811101905551
+        "count": 155,
+        "share": 0.47692307692307695
       }
     ],
     "sku-monthly": [
@@ -901,7 +901,7 @@
       {
         "month": "Nov",
         "assembled": null,
-        "backorders": null,
+        "backorders": 1,
         "fill_rate": null
       },
       {
