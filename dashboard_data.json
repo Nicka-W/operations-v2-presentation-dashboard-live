@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T19:02:42.234961+00:00",
+  "generatedAt": "2026-11-10T19:04:36.603578+00:00",
   "sourceModifiedAt": "2026-11-04T12:14:51+00:00",
   "kpis": {
     "housekeeping": {
@@ -227,6 +227,11 @@
         },
         {
           "week": 45,
+          "value_92m": 0.9,
+          "value_12m": null
+        },
+        {
+          "week": 46,
           "value_92m": 0.9,
           "value_12m": null
         }
@@ -722,6 +727,10 @@
       {
         "label": 45,
         "value": 0.992
+      },
+      {
+        "label": 46,
+        "value": 1
       }
     ],
     "sku-share": [
@@ -827,7 +836,7 @@
         "y2024": 2973,
         "y2025": 4152,
         "y2026_cpt": 325,
-        "y2026_george": 115
+        "y2026_george": 206
       },
       {
         "month": "Dec",
