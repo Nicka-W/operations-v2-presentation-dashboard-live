@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T20:32:45.671342+00:00",
+  "generatedAt": "2026-11-17T20:33:42.904456+00:00",
   "sourceModifiedAt": "2026-11-17T20:30:31+00:00",
   "kpis": {
     "housekeeping": {
@@ -740,6 +740,10 @@
       {
         "label": 46,
         "value": 1
+      },
+      {
+        "label": 47,
+        "value": 0.9938
       }
     ],
     "sku-share": [
@@ -919,8 +923,8 @@
       {
         "month": "Nov",
         "assembled": 2,
-        "backorders": 1,
-        "fill_rate": 0.5
+        "backorders": 3,
+        "fill_rate": -0.5
       },
       {
         "month": "Dec",
