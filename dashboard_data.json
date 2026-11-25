@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T05:39:41.914373+00:00",
+  "generatedAt": "2026-11-25T05:41:33.184153+00:00",
   "sourceModifiedAt": "2026-11-25T05:37:45+00:00",
   "kpis": {
     "housekeeping": {
@@ -373,6 +373,10 @@
       {
         "label": 13,
         "value": 0.9981
+      },
+      {
+        "label": 14,
+        "value": 0.999
       }
     ],
     "urgent-orders": [
